@@ -1,114 +1,46 @@
 <!DOCTYPE html>
 <html lang="gu">
 <head>
-
 <meta charset="UTF-8">
-
-<meta
-    name="viewport"
-    content="width=device-width,initial-scale=1.0"
->
-
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>GSRTC KM Register</title>
 
-<script
-    src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js">
-</script>
-
+<script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
 
 <style>
-
-/* =========================================================
-   BASIC
-========================================================= */
-
-*{
-    box-sizing:border-box;
-}
-
+*{box-sizing:border-box}
 body{
     margin:0;
-    font-family:
-        Arial,
-        "Noto Sans Gujarati",
-        sans-serif;
+    font-family:Arial,"Noto Sans Gujarati",sans-serif;
     background:#eef2f6;
     color:#17202a;
+    font-size:14px;
 }
-
 header{
     background:#0b5cab;
     color:#fff;
-    padding:14px 16px;
+    padding:15px 16px;
     position:sticky;
     top:0;
     z-index:20;
 }
-
-h1{
-    margin:0;
-    font-size:21px;
-}
-
-h2{
-    margin-top:0;
-}
-
-h3{
-    margin-top:8px;
-}
-
-.sub{
-    font-size:12px;
-    margin-top:4px;
-}
-
-.wrap{
-    padding:12px;
-    max-width:1900px;
-    margin:auto;
-}
-
-
-/* =========================================================
-   CARD
-========================================================= */
-
+h1{margin:0;font-size:22px}
+h2{margin:0 0 12px}
+h3{margin:8px 0}
+.sub{font-size:13px;margin-top:4px}
+.wrap{padding:12px;max-width:2100px;margin:auto}
 .card{
     background:#fff;
     border-radius:12px;
-    padding:12px;
+    padding:13px;
     margin-bottom:12px;
     box-shadow:0 2px 8px #0001;
 }
-
-
-/* =========================================================
-   GRID
-========================================================= */
-
-.grid{
-    display:grid;
-    grid-template-columns:
-        repeat(
-            auto-fit,
-            minmax(180px,1fr)
-        );
-    gap:9px;
-}
-
-
-/* =========================================================
-   BUTTONS
-========================================================= */
-
-.menu,
-.actions{
+.menu,.actions{
     display:flex;
     flex-wrap:wrap;
     gap:8px;
 }
-
 button{
     font:inherit;
     border:0;
@@ -119,188 +51,116 @@ button{
     font-weight:bold;
     cursor:pointer;
 }
-
-button:hover{
-    opacity:.9;
+button:hover{opacity:.92}
+.green{background:#198754}
+.orange{background:#d97706}
+.red{background:#b42318}
+.gray{background:#52616f}
+.purple{background:#6f42c1}
+.light{background:#e8eef5;color:#17324d}
+.hidden{display:none}
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    gap:10px;
 }
-
-.green{
-    background:#198754;
-}
-
-.orange{
-    background:#d97706;
-}
-
-.red{
-    background:#b42318;
-}
-
-.gray{
-    background:#52616f;
-}
-
-.purple{
-    background:#6f42c1;
-}
-
-.light{
-    background:#e8eef5;
-    color:#17324d;
-}
-
-
-/* =========================================================
-   INPUT
-========================================================= */
-
 label{
-    font-size:12px;
+    font-size:13px;
     font-weight:bold;
 }
-
-input,
-select{
+input,select{
     width:100%;
-    padding:9px;
+    padding:10px;
     border:1px solid #b9c3cf;
     border-radius:7px;
     margin-top:4px;
     background:#fff;
     font:inherit;
 }
-
-
-/* =========================================================
-   HIDDEN
-========================================================= */
-
-.hidden{
-    display:none;
+select{
+    font-size:15px;
+    font-weight:600;
 }
-
-
-/* =========================================================
-   TABLE
-========================================================= */
-
 .tablebox{
     overflow:auto;
-    max-height:68vh;
+    max-height:70vh;
     border:1px solid #ccd5df;
     border-radius:8px;
 }
-
 table{
     border-collapse:collapse;
-    min-width:2200px;
+    min-width:1900px;
     width:100%;
     background:#fff;
 }
-
-th,
-td{
+th,td{
     border:1px solid #cbd5df;
-    padding:6px;
+    padding:7px;
     text-align:center;
     white-space:nowrap;
-    font-size:12px;
+    font-size:13px;
 }
-
 th{
     background:#dce9f7;
     position:sticky;
     top:0;
     z-index:2;
 }
-
 .dailyCell{
     background:#eef8ff;
     font-weight:bold;
 }
-
-.programCell{
-    background:#f1f8f3;
-    font-weight:bold;
-}
-
 .totalCell{
     background:#f1f8f3;
     font-weight:bold;
 }
-
-
-/* =========================================================
-   DASHBOARD
-========================================================= */
-
+.programCell{
+    background:#f8fbff;
+    font-weight:bold;
+}
+.statusOK{
+    background:#dcfce7 !important;
+    color:#137333;
+    font-weight:bold;
+}
+.statusNear{
+    background:#fff3cd !important;
+    color:#8a5a00;
+    font-weight:bold;
+}
+.statusDue{
+    background:#fee2e2 !important;
+    color:#b42318;
+    font-weight:bold;
+}
 .stats{
     display:grid;
-    grid-template-columns:
-        repeat(
-            auto-fit,
-            minmax(150px,1fr)
-        );
-    gap:9px;
+    grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+    gap:10px;
 }
-
 .stat{
-    padding:14px;
+    padding:15px;
     background:#e0f2fe;
     border-radius:8px;
     text-align:center;
 }
-
 .stat b{
     display:block;
-    font-size:21px;
+    font-size:22px;
     color:#075985;
 }
-
-
-/* =========================================================
-   NOTE
-========================================================= */
-
 .note{
-    font-size:12px;
+    font-size:13px;
     color:#52616f;
     background:#fff7ed;
     border-left:4px solid #d97706;
     padding:10px;
 }
-
-
-/* =========================================================
-   BUS
-========================================================= */
-
 .busgrid{
     display:grid;
-    grid-template-columns:
-        repeat(
-            auto-fit,
-            minmax(210px,1fr)
-        );
+    grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
     gap:9px;
 }
-
-.busitem{
-    border:1px solid #ccd5df;
-    border-radius:9px;
-    padding:10px;
-    background:#fafcff;
-}
-
-.busitem b{
-    font-size:14px;
-}
-
-.busitem button{
-    margin-top:6px;
-    width:100%;
-}
-
 .folder{
     border:1px solid #cbd5df;
     border-radius:9px;
@@ -310,64 +170,14 @@ th{
     text-align:center;
     font-weight:bold;
 }
-
-.folder:hover{
-    background:#eaf4ff;
-}
-
-
-/* =========================================================
-   STATUS
-========================================================= */
-
-.statusOK{
-    background:#dcfce7 !important;
-    color:#137333;
-    font-weight:bold;
-}
-
-.statusNear{
-    background:#fff3cd !important;
-    color:#9a6700;
-    font-weight:bold;
-}
-
-.statusDue{
-    background:#fee2e2 !important;
-    color:#b42318;
-    font-weight:bold;
-}
-
-.okText{
-    color:#137333;
-    font-weight:bold;
-}
-
-.nearText{
-    color:#b45309;
-    font-weight:bold;
-}
-
-.dueText{
-    color:#b42318;
-    font-weight:bold;
-}
-
-
-/* =========================================================
-   SUMMARY
-========================================================= */
-
+.folder:hover{background:#eaf4ff}
+.small{font-size:12px;color:#5f6b76}
 .summaryGrid{
     display:grid;
-    grid-template-columns:
-        repeat(
-            auto-fit,
-            minmax(170px,1fr)
-        );
+    grid-template-columns:repeat(auto-fit,minmax(170px,1fr));
     gap:10px;
+    margin-top:10px;
 }
-
 .summaryCard{
     background:#eef6ff;
     border:1px solid #cdddea;
@@ -375,456 +185,192 @@ th{
     padding:12px;
     text-align:center;
 }
-
 .summaryCard strong{
     display:block;
-    font-size:20px;
+    font-size:21px;
     color:#075985;
 }
-
-.small{
-    font-size:11px;
-    color:#5f6b76;
+.modal{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:#0008;
+    z-index:100;
+    align-items:center;
+    justify-content:center;
+    padding:12px;
 }
-
-
-/* =========================================================
-   MOBILE
-========================================================= */
-
-@media(max-width:600px){
-
-    h1{
-        font-size:18px;
-    }
-
-    button{
-        padding:9px 10px;
-        font-size:13px;
-    }
-
-    .card{
-        padding:9px;
-    }
-
+.modal.show{display:flex}
+.modalbox{
+    background:#fff;
+    border-radius:12px;
+    max-width:1200px;
+    width:100%;
+    max-height:92vh;
+    overflow:auto;
+    padding:16px;
 }
-
+.legend{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-top:8px;
+}
+.legend span{
+    display:inline-block;
+    padding:6px 9px;
+    border-radius:7px;
+    font-size:12px;
+    font-weight:bold;
+}
+.lok{background:#dcfce7;color:#137333}
+.lnear{background:#fff3cd;color:#8a5a00}
+.ldue{background:#fee2e2;color:#b42318}
+.lnormal{background:#f4f6f8;color:#52616f}
 </style>
-
 </head>
-
 
 <body>
 
-
-<!-- =======================================================
-     HEADER
-======================================================= -->
-
 <header>
-
-    <h1>
-        🚌 GSRTC KM REGISTER
-    </h1>
-
+    <h1>🚌 GSRTC KM REGISTER</h1>
     <div class="sub">
-        Excel Bus No. → Date Wise KM → Program KM →
-        Maintenance → Service → Summary
+        Excel Bus No. → Date Wise KM → All Program KM → Maintenance → Service → Summary
     </div>
-
 </header>
-
 
 <div class="wrap">
 
-
-<!-- =======================================================
-     MENU
-======================================================= -->
-
 <div class="menu card">
-
-    <button onclick="show('dashboard')">
-        🏠 Dashboard
-    </button>
-
-    <button onclick="show('entry')">
-        ➕ Date Wise KM
-    </button>
-
-    <button
-        class="orange"
-        onclick="show('old')"
-    >
-        📌 Old / Program Base
-    </button>
-
-    <button onclick="show('bus')">
-        🚌 Bus Master
-    </button>
-
-    <button onclick="show('maintenance')">
-        🔧 Maintenance
-    </button>
-
-    <button onclick="show('report')">
-        📊 Summary
-    </button>
-
-    <button
-        class="green"
-        onclick="exportExcel()"
-    >
-        ⬇ Export Excel
-    </button>
-
-    <button
-        class="orange"
-        onclick="$('excelFile').click()"
-    >
-        ⬆ Import Excel
-    </button>
-
-    <button
-        class="red"
-        onclick="clearAllData()"
-    >
-        🗑 Clear All Data
-    </button>
-
-    <input
-        id="excelFile"
-        type="file"
-        accept=".xlsx,.xls,.csv"
-        hidden
-        onchange="importExcel(event)"
-    >
-
+    <button onclick="show('dashboard')">🏠 Dashboard</button>
+    <button onclick="show('entry')">➕ Date Wise KM</button>
+    <button class="orange" onclick="show('old')">📌 Old / Program Base</button>
+    <button onclick="show('bus')">🚌 Bus Master</button>
+    <button onclick="show('maintenance')">🔧 Maintenance</button>
+    <button onclick="show('report')">📊 Summary</button>
+    <button class="green" onclick="exportExcel()">⬇ Export Excel</button>
+    <button class="orange" onclick="$('excelFile').click()">⬆ Import Excel</button>
+    <button class="red" onclick="clearAllData()">🗑 CLEAR DATA</button>
+    <input id="excelFile" type="file" accept=".xlsx,.xls,.csv" hidden onchange="importExcel(event)">
 </div>
 
-
-<!-- =======================================================
-     DASHBOARD
-======================================================= -->
-
+<!-- DASHBOARD -->
 <section id="dashboard">
-
     <div class="card">
-
-        <h2>
-            🏠 Dashboard
-        </h2>
-
+        <h2>🏠 Dashboard</h2>
         <div class="stats">
-
-            <div class="stat">
-                <b id="sBus">0</b>
-                BUS
-            </div>
-
-            <div class="stat">
-                <b id="sEntry">0</b>
-                DATE ROWS
-            </div>
-
-            <div class="stat">
-                <b id="sKm">0</b>
-                DAILY KM
-            </div>
-
-            <div class="stat">
-                <b id="sService">0</b>
-                SERVICE DONE
-            </div>
-
+            <div class="stat"><b id="sBus">0</b>Bus</div>
+            <div class="stat"><b id="sEntry">0</b>Date Rows</div>
+            <div class="stat"><b id="sKm">0</b>Total Daily KM</div>
+            <div class="stat"><b id="sService">0</b>Service Done</div>
         </div>
-
     </div>
-
-
     <div class="card note">
-
-        <b>Excel Import:</b>
-
-        Excelની દરેક Vehicle Sheetનું નામ
-        <b>BUS NO.</b> તરીકે લેવામાં આવશે.
-
-        <br><br>
-
-        ઉદાહરણ:
-
-        <br>
-
-        Sheet = <b>3868</b>
-        → Bus No. = <b>3868</b>
-
-        <br>
-
-        Sheet = <b>2492</b>
-        → Bus No. = <b>2492</b>
-
-        <br><br>
-
-        <b>BUS-01 થી BUS-75 dummy Bus automatic બનાવાશે નહીં.</b>
-
+        Excelમાં દરેક Vehicle માટે અલગ Sheet હોય તો Sheet Name જ <b>BUS NO.</b> તરીકે લેવાશે.
+        ઉદાહરણ: Sheet <b>3868</b> → Bus No. <b>3868</b>.
+        BUS-01 થી BUS-75 dummy Bus automatic નહીં બને.
     </div>
-
 </section>
 
-
-<!-- =======================================================
-     DATE ENTRY
-======================================================= -->
-
+<!-- DATE WISE -->
 <section id="entry" class="hidden">
 
     <div class="card">
-
-        <h2>
-            ➕ Date Wise KM
-        </h2>
+        <h2>➕ Date Wise KM</h2>
 
         <div class="grid">
 
             <div>
-
-                <label>
-                    BUS NO.
-                </label>
-
-                <select id="eBus"></select>
-
+                <label>BUS NO.</label>
+                <select id="eBus" onchange="syncMake()"></select>
             </div>
 
-
             <div>
-
-                <label>
-                    DATE
-                </label>
-
-                <input
-                    id="eDate"
-                    type="date"
-                >
-
+                <label>DATE</label>
+                <input id="eDate" type="date">
             </div>
 
-
             <div>
-
-                <label>
-                    DAILY KM
-                </label>
-
-                <input
-                    id="eDaily"
-                    type="number"
-                    min="0"
-                >
-
+                <label>DAILY KM</label>
+                <input id="eDaily" type="number" min="0">
             </div>
 
-
             <div>
-
-                <label>
-                    DOCKING KM
-                </label>
-
-                <input
-                    id="eDocking"
-                    type="number"
-                    min="0"
-                >
-
+                <label>DOCKING KM (OPTIONAL)</label>
+                <input id="eDocking" type="number" min="0">
             </div>
 
-
             <div>
-
-                <label>
-                    MAKE
-                </label>
-
-                <input
-                    id="eMake"
-                    placeholder="TATA / LEYLAND"
-                >
-
+                <label>MAKE</label>
+                <input id="eMake" placeholder="TATA SU">
             </div>
 
         </div>
-
 
         <br>
 
-
         <div class="actions">
-
-            <button
-                class="green"
-                onclick="saveDaily()"
-            >
-                💾 SAVE KM
-            </button>
-
-            <button
-                class="gray"
-                onclick="clearEntry()"
-            >
-                CLEAR
-            </button>
-
+            <button class="green" onclick="saveDaily()">💾 SAVE KM</button>
+            <button class="gray" onclick="clearEntry()">CLEAR</button>
         </div>
-
     </div>
 
-
     <div class="card">
-
-        <h2>
-            📅 Date Wise Register
-        </h2>
-
+        <h2>📅 Date Wise Register</h2>
 
         <div class="grid">
-
             <div>
-
-                <label>
-                    BUS
-                </label>
-
-                <select
-                    id="fBus"
-                    onchange="renderRegister()"
-                ></select>
-
+                <label>BUS</label>
+                <select id="fBus" onchange="renderRegister()"></select>
             </div>
 
-
             <div>
-
-                <label>
-                    MONTH
-                </label>
-
-                <input
-                    id="fMonth"
-                    type="month"
-                    onchange="renderRegister()"
-                >
-
+                <label>MONTH</label>
+                <input id="fMonth" type="month" onchange="renderRegister()">
             </div>
-
         </div>
 
-
-        <div
-            class="tablebox"
-            style="margin-top:10px"
-        >
-
+        <div class="tablebox" style="margin-top:10px">
             <table>
-
-                <thead
-                    id="regHead"
-                ></thead>
-
-                <tbody
-                    id="regBody"
-                ></tbody>
-
+                <thead id="regHead"></thead>
+                <tbody id="regBody"></tbody>
             </table>
-
         </div>
-
     </div>
 
 </section>
 
-
-<!-- =======================================================
-     OLD PROGRAM BASE
-======================================================= -->
-
+<!-- OLD BASE -->
 <section id="old" class="hidden">
 
     <div class="card">
 
-        <h2>
-            📌 OLD / OPENING PROGRAM BASE
-        </h2>
-
+        <h2>📌 OLD / OPENING PROGRAM BASE</h2>
 
         <div class="grid">
 
             <div>
-
-                <label>
-                    BUS
-                </label>
-
-                <select
-                    id="oBus"
-                    onchange="renderOldBase()"
-                ></select>
-
+                <label>BUS</label>
+                <select id="oBus" onchange="renderOldBase()"></select>
             </div>
-
 
             <div>
-
-                <label>
-                    BASE DATE
-                </label>
-
-                <input
-                    id="oDate"
-                    type="date"
-                >
-
+                <label>BASE DATE</label>
+                <input id="oDate" type="date">
             </div>
 
         </div>
 
-
-        <div class="note">
-
-            અહીં Opening / Old Program KM નાખી શકો.
-
-            <br><br>
-
-            ઉદાહરણ:
-
-            <br>
-
-            DOCKING = 500000
-
-            <br>
-
-            પછી 02-08-2026નું Daily KM
-            4000 હોય તો Docking Program KM
-            = 504000 દેખાશે.
-
+        <div class="note" style="margin-top:10px">
+            Opening KM અહીં દરેક Program માટે અલગથી રાખી શકાય છે.
+            Base Date પછી Daily KM Program KMમાં automatic ઉમેરાશે.
         </div>
 
-
-        <div
-            id="oldGrid"
-            class="busgrid"
-            style="margin-top:10px"
-        ></div>
-
+        <div id="oldGrid" class="busgrid" style="margin-top:10px"></div>
 
         <br>
 
-
-        <button
-            class="green"
-            onclick="saveOldBase()"
-        >
+        <button class="green" onclick="saveOldBase()">
             💾 SAVE PROGRAM BASE
         </button>
 
@@ -832,126 +378,51 @@ th{
 
 </section>
 
-
-<!-- =======================================================
-     BUS MASTER
-======================================================= -->
-
+<!-- BUS MASTER -->
 <section id="bus" class="hidden">
 
     <div class="card">
 
-        <h2>
-            🚌 BUS MASTER
-        </h2>
-
+        <h2>🚌 BUS MASTER</h2>
 
         <div class="grid">
 
             <div>
-
-                <label>
-                    BUS NO.
-                </label>
-
-                <input
-                    id="bNo"
-                    placeholder="3868"
-                >
-
+                <label>BUS NO.</label>
+                <input id="bNo" placeholder="3868">
             </div>
 
-
             <div>
-
-                <label>
-                    MAKE
-                </label>
-
-                <input
-                    id="bMake"
-                    placeholder="TATA SU"
-                >
-
+                <label>MAKE</label>
+                <input id="bMake" placeholder="TATA SU">
             </div>
 
         </div>
-
 
         <br>
 
-
-        <button
-            class="green"
-            onclick="addBus()"
-        >
+        <button class="green" onclick="addBus()">
             ➕ ADD BUS
         </button>
 
-
-        <div class="note" style="margin-top:10px">
-
-            Maximum 75 actual Bus.
-
-            Bus No. Excel પ્રમાણે
-            અથવા manually નાખી શકો.
-
-        </div>
-
     </div>
-
-
-    <div class="card">
-
-        <h3>
-            📁 BUS WISE FOLDER
-        </h3>
-
-
-        <div
-            id="busFolders"
-            class="busgrid"
-        ></div>
-
-    </div>
-
 
     <div class="card">
 
         <div class="tablebox">
 
-            <table
-                style="min-width:650px"
-            >
+            <table style="min-width:650px">
 
                 <thead>
-
                     <tr>
-
-                        <th>
-                            BUS NO.
-                        </th>
-
-                        <th>
-                            MAKE
-                        </th>
-
-                        <th>
-                            DATE ROWS
-                        </th>
-
-                        <th>
-                            ACTION
-                        </th>
-
+                        <th>BUS NO.</th>
+                        <th>MAKE</th>
+                        <th>DATE ROWS</th>
+                        <th>ACTION</th>
                     </tr>
-
                 </thead>
 
-
-                <tbody
-                    id="busBody"
-                ></tbody>
+                <tbody id="busBody"></tbody>
 
             </table>
 
@@ -961,140 +432,53 @@ th{
 
 </section>
 
-
-<!-- =======================================================
-     MAINTENANCE
-======================================================= -->
-
-<section
-    id="maintenance"
-    class="hidden"
->
+<!-- MAINTENANCE -->
+<section id="maintenance" class="hidden">
 
     <div class="card">
 
-        <h2>
-            🔧 Maintenance / Program Status
-        </h2>
-
+        <h2>🔧 Maintenance Program - DATE WISE ALL PROGRAMS</h2>
 
         <div class="grid">
 
             <div>
-
-                <label>
-                    BUS
-                </label>
-
-                <select
-                    id="mBus"
-                    onchange="renderMaintenance()"
-                ></select>
-
+                <label>BUS NO.</label>
+                <select id="mBus" onchange="renderMaintenance()"></select>
             </div>
-
 
             <div>
+                <label>FROM DATE</label>
+                <input id="mFrom" type="date" onchange="renderMaintenance()">
+            </div>
 
-                <label>
-                    PROGRAM
-                </label>
-
-                <select
-                    id="mProgram"
-                    onchange="renderMaintenance()"
-                ></select>
-
+            <div>
+                <label>TO DATE</label>
+                <input id="mTo" type="date" onchange="renderMaintenance()">
             </div>
 
         </div>
 
-
-        <div class="note">
-
-            🟢 OK = Service દૂર છે
-
-            <br>
-
-            🟠 NEAR = Next Serviceના
-            1000 KM કે ઓછું બાકી
-
-            <br>
-
-            🔴 DUE = Service KM પહોંચી ગયું
-
+        <div class="legend">
+            <span class="lnormal">NORMAL</span>
+            <span class="lok">🟢 OK</span>
+            <span class="lnear">🟠 SERVICE NEAR</span>
+            <span class="ldue">🔴 SERVICE DUE</span>
         </div>
 
+        <div class="note" style="margin-top:10px">
+            દરેક તારીખમાં <b>Daily KM + બધા Program KM</b> એક સાથે દેખાશે.
+            ઉદાહરણ:
+            <b>01-08-2026 → Docking 500000</b>,
+            <b>02-08-2026 → Docking 504000</b>.
+        </div>
 
-        <div
-            class="tablebox"
-            style="margin-top:10px"
-        >
+        <div class="tablebox" style="margin-top:10px">
 
-            <table
-                style="min-width:1500px"
-            >
+            <table>
 
-                <thead>
+                <thead id="maintHead"></thead>
 
-                    <tr>
-
-                        <th>
-                            DATE
-                        </th>
-
-                        <th>
-                            BUS NO.
-                        </th>
-
-                        <th>
-                            PROGRAM
-                        </th>
-
-                        <th>
-                            DATE WISE DAILY KM
-                        </th>
-
-                        <th>
-                            PROGRAM KM
-                        </th>
-
-                        <th>
-                            PROGRESSIVE KM
-                        </th>
-
-                        <th>
-                            LAST SERVICE DATE
-                        </th>
-
-                        <th>
-                            LAST SERVICE KM
-                        </th>
-
-                        <th>
-                            INTERVAL KM
-                        </th>
-
-                        <th>
-                            NEXT SERVICE KM
-                        </th>
-
-                        <th>
-                            KM REMAINING
-                        </th>
-
-                        <th>
-                            STATUS
-                        </th>
-
-                    </tr>
-
-                </thead>
-
-
-                <tbody
-                    id="maintBody"
-                ></tbody>
+                <tbody id="maintBody"></tbody>
 
             </table>
 
@@ -1102,255 +486,114 @@ th{
 
     </div>
 
-
-    <!-- PROGRAM INTERVAL -->
-
+    <!-- INTERVAL -->
     <div class="card">
 
-        <h2>
-            ⚙ Program Interval
-        </h2>
-
+        <h2>⚙ Program Interval</h2>
 
         <div class="grid">
 
             <div>
-
-                <label>
-                    BUS
-                </label>
-
-                <select
-                    id="iBus"
-                ></select>
-
+                <label>BUS</label>
+                <select id="iBus"></select>
             </div>
 
-
             <div>
-
-                <label>
-                    PROGRAM
-                </label>
-
-                <select
-                    id="iProgram"
-                ></select>
-
+                <label>PROGRAM</label>
+                <select id="iProgram"></select>
             </div>
 
-
             <div>
-
-                <label>
-                    INTERVAL KM
-                </label>
-
-                <input
-                    id="iInterval"
-                    type="number"
-                    min="0"
-                >
-
+                <label>INTERVAL KM</label>
+                <input id="iInterval" type="number" min="0">
             </div>
 
         </div>
 
-
         <br>
 
-
-        <button
-            class="green"
-            onclick="saveInterval()"
-        >
+        <button class="green" onclick="saveInterval()">
             💾 SAVE INTERVAL
         </button>
 
     </div>
 
-
     <!-- SERVICE DONE -->
-
     <div class="card">
 
-        <h2>
-            ✅ SERVICE DONE
-        </h2>
-
+        <h2>✅ SERVICE DONE</h2>
 
         <div class="grid">
 
             <div>
-
-                <label>
-                    DATE
-                </label>
-
-                <input
-                    id="sDate"
-                    type="date"
-                >
-
+                <label>DATE</label>
+                <input id="sDate" type="date">
             </div>
 
-
             <div>
-
-                <label>
-                    BUS NO.
-                </label>
-
-                <select
-                    id="sBus"
-                ></select>
-
+                <label>BUS NO.</label>
+                <select id="sBus"></select>
             </div>
 
-
             <div>
-
-                <label>
-                    PROGRAM
-                </label>
-
-                <select
-                    id="sProgram"
-                ></select>
-
+                <label>PROGRAM</label>
+                <select id="sProgram"></select>
             </div>
 
-
             <div>
-
-                <label>
-                    SERVICE KM
-                </label>
-
-                <input
-                    id="sKm"
-                    type="number"
-                    min="0"
-                >
-
+                <label>SERVICE KM</label>
+                <input id="sKm" type="number" min="0">
             </div>
 
         </div>
 
-
         <br>
 
-
-        <button
-            class="green"
-            onclick="serviceDone()"
-        >
+        <button class="green" onclick="serviceDone()">
             ✅ SERVICE DONE SAVE
         </button>
 
-
-        <div
-            id="serviceHistory"
-            style="margin-top:10px"
-        ></div>
+        <div id="serviceHistory" style="margin-top:10px"></div>
 
     </div>
 
 </section>
 
-
-<!-- =======================================================
-     SUMMARY
-======================================================= -->
-
-<section
-    id="report"
-    class="hidden"
->
+<!-- SUMMARY -->
+<section id="report" class="hidden">
 
     <div class="card">
 
-        <h2>
-            📊 BUS WISE SUMMARY
-        </h2>
-
+        <h2>📊 BUS WISE SUMMARY</h2>
 
         <div class="grid">
 
             <div>
-
-                <label>
-                    BUS
-                </label>
-
-                <select
-                    id="rBus"
-                    onchange="renderReport()"
-                ></select>
-
+                <label>BUS NO.</label>
+                <select id="rBus" onchange="renderReport()"></select>
             </div>
 
-
             <div>
-
-                <label>
-                    FROM
-                </label>
-
-                <input
-                    id="rFrom"
-                    type="date"
-                    onchange="renderReport()"
-                >
-
+                <label>FROM</label>
+                <input id="rFrom" type="date" onchange="renderReport()">
             </div>
 
-
             <div>
-
-                <label>
-                    TO
-                </label>
-
-                <input
-                    id="rTo"
-                    type="date"
-                    onchange="renderReport()"
-                >
-
+                <label>TO</label>
+                <input id="rTo" type="date" onchange="renderReport()">
             </div>
 
         </div>
 
+        <div id="reportStats" class="summaryGrid"></div>
 
-        <div
-            id="summaryFolders"
-            class="busgrid"
-            style="margin-top:12px"
-        ></div>
-
-
-        <div
-            id="reportStats"
-            class="summaryGrid"
-            style="margin-top:12px"
-        ></div>
-
-
-        <div
-            class="tablebox"
-            style="margin-top:12px"
-        >
+        <div class="tablebox" style="margin-top:12px">
 
             <table>
 
-                <thead
-                    id="repHead"
-                ></thead>
+                <thead id="repHead"></thead>
 
-                <tbody
-                    id="repBody"
-                ></tbody>
+                <tbody id="repBody"></tbody>
 
             </table>
 
@@ -1360,9 +603,7 @@ th{
 
 </section>
 
-
 </div>
-
 
 <script>
 
@@ -1370,30 +611,14 @@ th{
    DATABASE
 ========================================================= */
 
-/*
-   Same main storage key રાખી છે જેથી
-   હાલનો data હોય તો શક્ય હોય ત્યાંથી
-   load થાય.
-*/
-
 const DBKEY =
-    'GSRTC_KM_REGISTER_EXCEL_BUS_V10';
+    'GSRTC_KM_REGISTER_EXCEL_REALBUS_V11';
 
+const MAX_BUS =
+    75;
 
-const MAX_BUS = 75;
-
-
-/*
-   Service નજીક આવવાની limit.
-   1000 KM અથવા ઓછું બાકી હોય તો NEAR.
-*/
-
-const SERVICE_NEAR_KM = 1000;
-
-
-/* =========================================================
-   PROGRAMS
-========================================================= */
+const SERVICE_NEAR_KM =
+    1000;
 
 const PROGRAMS = [
 
@@ -1425,35 +650,19 @@ const PROGRAMS = [
 
 ];
 
-
-/* =========================================================
-   MONTHS
-========================================================= */
-
 const MONTHS = {
 
     JANUARY:1,
-
     FEBRUARY:2,
-
     MARCH:3,
-
     APRIL:4,
-
     MAY:5,
-
     JUNE:6,
-
     JULY:7,
-
     AUGUST:8,
-
     SEPTEMBER:9,
-
     OCTOBER:10,
-
     NOVEMBER:11,
-
     DECEMBER:12
 
 };
@@ -1464,7 +673,6 @@ const MONTHS = {
 ========================================================= */
 
 let db;
-
 
 try{
 
@@ -1481,12 +689,9 @@ catch(e){
 }
 
 
-if(
-    !db ||
-    typeof db !== 'object'
-){
+if(!db || typeof db!=='object'){
 
-    db = {
+    db={
 
         buses:[],
 
@@ -1496,70 +701,11 @@ if(
 
         baseDates:{},
 
-        programValues:{},
-
         programConfig:{},
 
         services:[]
 
     };
-
-}
-
-
-/* =========================================================
-   DATABASE NORMALIZE
-========================================================= */
-
-function normalizeDatabase(){
-
-    if(!Array.isArray(db.buses))
-        db.buses=[];
-
-    if(!Array.isArray(db.entries))
-        db.entries=[];
-
-    if(!Array.isArray(db.services))
-        db.services=[];
-
-    if(!db.bases || typeof db.bases!=='object')
-        db.bases={};
-
-    if(!db.baseDates || typeof db.baseDates!=='object')
-        db.baseDates={};
-
-    if(
-        !db.programValues ||
-        typeof db.programValues!=='object'
-    )
-        db.programValues={};
-
-    if(
-        !db.programConfig ||
-        typeof db.programConfig!=='object'
-    )
-        db.programConfig={};
-
-
-    /*
-       Remove broken blank Bus.
-    */
-
-    db.buses =
-        db.buses.filter(
-            b =>
-            b &&
-            String(b.no||'').trim()
-        );
-
-
-    /*
-       Make sure fields exist.
-    */
-
-    db.buses.forEach(
-        ensureBus
-    );
 
 }
 
@@ -1604,22 +750,18 @@ function num(v){
 function esc(v){
 
     return String(v ?? '')
-        .replace(
-            /[&<>"']/g,
-            m => ({
+    .replace(
+        /[&<>"']/g,
+        m=>({
 
-                '&':'&amp;',
+            '&':'&amp;',
+            '<':'&lt;',
+            '>':'&gt;',
+            '"':'&quot;',
+            "'":'&#039;'
 
-                '<':'&lt;',
-
-                '>':'&gt;',
-
-                '"':'&quot;',
-
-                "'":'&#039;'
-
-            }[m])
-        );
+        }[m])
+    );
 
 }
 
@@ -1633,18 +775,13 @@ function pad(n){
 
 function today(){
 
-    let d =
-        new Date();
+    let d=new Date();
 
     return (
         d.getFullYear()
-        +
-        '-'
-        +
+        +'-'+
         pad(d.getMonth()+1)
-        +
-        '-'
-        +
+        +'-'+
         pad(d.getDate())
     );
 
@@ -1656,26 +793,18 @@ function fmtDate(s){
     if(!s)
         return '';
 
-    let p =
+    let p=
         String(s).split('-');
-
 
     if(p.length===3){
 
         return (
-            p[2]
-            +
-            '-'
-            +
-            p[1]
-            +
-            '-'
-            +
+            p[2]+'-'+
+            p[1]+'-'+
             p[0]
         );
 
     }
-
 
     return s;
 
@@ -1683,7 +812,7 @@ function fmtDate(s){
 
 
 /* =========================================================
-   EMPTY BASE
+   DATABASE CLEAN
 ========================================================= */
 
 function emptyBase(){
@@ -1691,7 +820,7 @@ function emptyBase(){
     let o={};
 
     PROGRAMS.forEach(
-        p => o[p]=0
+        p=>o[p]=0
     );
 
     return o;
@@ -1699,25 +828,24 @@ function emptyBase(){
 }
 
 
-/* =========================================================
-   BUS
-========================================================= */
-
 function ensureBus(b){
 
     if(!b)
         return;
 
-    if(!b.no)
-        b.no='';
+    b.no=
+        String(
+            b.no||''
+        ).trim();
 
-    if(!b.make)
-        b.make='';
+
+    b.make=
+        String(
+            b.make||''
+        ).trim();
 
 
-    if(
-        !db.bases[b.no]
-    ){
+    if(!db.bases[b.no]){
 
         db.bases[b.no]=
             emptyBase();
@@ -1729,17 +857,7 @@ function ensureBus(b){
         !db.baseDates[b.no]
     ){
 
-        db.baseDates[b.no]=
-            '';
-
-    }
-
-
-    if(
-        !db.programValues[b.no]
-    ){
-
-        db.programValues[b.no]={};
+        db.baseDates[b.no]='';
 
     }
 
@@ -1748,8 +866,8 @@ function ensureBus(b){
         p=>{
 
             if(
-                db.bases[b.no][p] ===
-                undefined
+                db.bases[b.no][p]
+                ===undefined
             ){
 
                 db.bases[b.no][p]=0;
@@ -1762,63 +880,38 @@ function ensureBus(b){
 }
 
 
-/* =========================================================
-   REMOVE OLD EMPTY BUS-01...BUS-75
-   ONLY IF THEY HAVE NO REAL DATA
-========================================================= */
-
-function cleanEmptyPlaceholderBuses(){
+function removeEmptyOldPlaceholders(){
 
     db.buses =
         db.buses.filter(
-            b => {
+            b=>{
 
                 let no =
-                    String(b.no||'')
-                    .trim()
+                    String(
+                        b.no||''
+                    ).trim()
                     .toUpperCase();
 
 
-                let m =
-                    no.match(
-                        /^BUS[- ]0*(\d{1,2})$/
-                    );
+                let placeholder =
+                    /^BUS[- ]0*[0-9]{1,2}$/
+                    .test(no);
 
 
-                if(!m)
-                    return true;
-
-
-                let n =
-                    Number(m[1]);
-
-
-                if(
-                    n < 1 ||
-                    n > 75
-                )
+                if(!placeholder)
                     return true;
 
 
                 let hasEntries =
                     db.entries.some(
-                        x =>
-                        x.bus===b.no
+                        x=>x.bus===b.no
                     );
 
 
-                let hasServices =
+                let hasService =
                     db.services.some(
-                        x =>
-                        x.bus===b.no
+                        x=>x.bus===b.no
                     );
-
-
-                let hasMake =
-                    String(
-                        b.make||''
-                    ).trim()
-                    !=='';
 
 
                 let base =
@@ -1827,49 +920,31 @@ function cleanEmptyPlaceholderBuses(){
 
                 let hasBase =
                     PROGRAMS.some(
-                        p =>
-                        num(base[p]) !== 0
+                        p=>num(base[p])!==0
                     );
 
 
+                let hasMake =
+                    !!String(
+                        b.make||''
+                    ).trim();
+
+
                 /*
-                   Completely empty placeholder
-                   = remove.
+                   Old empty dummy BUS-01...
+                   remove automatically.
                 */
 
                 if(
                     !hasEntries &&
-                    !hasServices &&
-                    !hasMake &&
-                    !hasBase
+                    !hasService &&
+                    !hasBase &&
+                    !hasMake
                 ){
 
                     delete db.bases[b.no];
 
                     delete db.baseDates[b.no];
-
-                    delete db.programValues[b.no];
-
-
-                    Object.keys(
-                        db.programConfig
-                    )
-                    .forEach(
-                        k=>{
-
-                            if(
-                                k.startsWith(
-                                    b.no+'|'
-                                )
-                            ){
-
-                                delete db.programConfig[k];
-
-                            }
-
-                        }
-                    );
-
 
                     return false;
 
@@ -1884,70 +959,84 @@ function cleanEmptyPlaceholderBuses(){
 }
 
 
-/* =========================================================
-   BUS SORT
-========================================================= */
+function cleanDatabase(){
 
-function sortBuses(){
+    if(!Array.isArray(db.buses))
+        db.buses=[];
 
-    db.buses.sort(
-        (a,b)=>{
+    if(!Array.isArray(db.entries))
+        db.entries=[];
 
-            let an =
-                parseInt(
-                    String(a.no)
-                    .replace(/\D/g,'')
-                ) || 0;
+    if(!Array.isArray(db.services))
+        db.services=[];
 
+    if(!db.bases)
+        db.bases={};
 
-            let bn =
-                parseInt(
-                    String(b.no)
-                    .replace(/\D/g,'')
-                ) || 0;
+    if(!db.baseDates)
+        db.baseDates={};
+
+    if(!db.programConfig)
+        db.programConfig={};
 
 
-            if(
-                an &&
-                bn &&
-                an!==bn
-            ){
-
-                return an-bn;
-
-            }
+    removeEmptyOldPlaceholders();
 
 
-            return String(a.no)
-                .localeCompare(
-                    String(b.no),
-                    undefined,
-                    {
-                        numeric:true,
-                        sensitivity:'base'
-                    }
-                );
+    db.buses =
+        db.buses.filter(
+            b=>
+            b &&
+            String(b.no||'').trim()!==''
+        );
 
-        }
-    );
-
-}
-
-
-/* =========================================================
-   ENSURE BUSES
-   NO AUTOMATIC BUS-01 TO BUS-75
-========================================================= */
-
-function ensureBuses(){
-
-    normalizeDatabase();
-
-    cleanEmptyPlaceholderBuses();
 
     db.buses.forEach(
         ensureBus
     );
+
+
+    db.entries =
+        db.entries.filter(
+            x=>
+            x &&
+            x.bus &&
+            x.date
+        );
+
+
+    db.entries.forEach(
+        x=>{
+
+            x.bus =
+                String(
+                    x.bus
+                ).trim();
+
+            x.date =
+                normalizeDateValue(
+                    x.date
+                );
+
+            x.daily=
+                num(x.daily);
+
+            x.docking=
+                num(x.docking);
+
+        }
+    );
+
+
+    db.services =
+        db.services.filter(
+            x=>
+            x &&
+            x.bus &&
+            x.program &&
+            x.date
+        );
+
 
     sortBuses();
 
@@ -1955,22 +1044,47 @@ function ensureBuses(){
 
 
 /* =========================================================
-   SHOW
+   SORT BUSES
 ========================================================= */
 
-function show(id){
+function sortBuses(){
 
-    document
-        .querySelectorAll('section')
-        .forEach(
-            x=>x.classList.add('hidden')
-        );
+    db.buses.sort(
+        (a,b)=>{
+
+            let an=
+                parseInt(
+                    String(a.no)
+                    .replace(/\D/g,'')
+                );
+
+            let bn=
+                parseInt(
+                    String(b.no)
+                    .replace(/\D/g,'')
+                );
 
 
-    $(id).classList.remove('hidden');
+            if(
+                Number.isFinite(an) &&
+                Number.isFinite(bn) &&
+                an!==bn
+            )
+                return an-bn;
 
 
-    refresh();
+            return String(a.no)
+            .localeCompare(
+                String(b.no),
+                undefined,
+                {
+                    numeric:true,
+                    sensitivity:'base'
+                }
+            );
+
+        }
+    );
 
 }
 
@@ -1981,30 +1095,22 @@ function show(id){
 
 function init(){
 
-    ensureBuses();
+    cleanDatabase();
 
-
-    $('eDate').value =
+    $('eDate').value=
         today();
 
-
-    $('oDate').value =
+    $('oDate').value=
         today();
 
-
-    $('sDate').value =
+    $('sDate').value=
         today();
 
-
-    $('fMonth').value =
+    $('fMonth').value=
         today().slice(0,7);
 
 
-    fillProgramSelects();
-
-
-    save();
-
+    setProgramSelects();
 
     refresh();
 
@@ -2015,24 +1121,19 @@ function init(){
    PROGRAM SELECTS
 ========================================================= */
 
-function fillProgramSelects(){
+function setProgramSelects(){
 
     [
-        'mProgram',
         'iProgram',
         'sProgram'
     ]
     .forEach(
         id=>{
 
-            if(!$(id))
-                return;
-
-
             $(id).innerHTML =
                 PROGRAMS
                 .map(
-                    p =>
+                    p=>
                     `<option value="${esc(p)}">
                         ${esc(p)}
                     </option>`
@@ -2046,12 +1147,32 @@ function fillProgramSelects(){
 
 
 /* =========================================================
+   SHOW
+========================================================= */
+
+function show(id){
+
+    document
+    .querySelectorAll('section')
+    .forEach(
+        x=>x.classList.add('hidden')
+    );
+
+
+    $(id).classList.remove('hidden');
+
+    refresh();
+
+}
+
+
+/* =========================================================
    REFRESH
 ========================================================= */
 
 function refresh(){
 
-    ensureBuses();
+    cleanDatabase();
 
     fillBusSelects();
 
@@ -2067,6 +1188,8 @@ function refresh(){
 
     dashboard();
 
+    save();
+
 }
 
 
@@ -2076,7 +1199,7 @@ function refresh(){
 
 function fillBusSelects(){
 
-    let ids = [
+    let ids=[
 
         'eBus',
         'fBus',
@@ -2098,16 +1221,15 @@ function fillBusSelects(){
                 return;
 
 
-            let old =
-                el.value;
+            let old=el.value;
 
 
-            el.innerHTML =
-                '<option value="">SELECT BUS</option>'
+            el.innerHTML=
+                '<option value="">BUS NO.</option>'
                 +
                 db.buses
                 .map(
-                    b =>
+                    b=>
                     `<option value="${esc(b.no)}">
                         ${esc(b.no)}
                     </option>`
@@ -2116,11 +1238,8 @@ function fillBusSelects(){
 
 
             if(
-                Array.from(
-                    el.options
-                )
-                .some(
-                    o=>o.value===old
+                db.buses.some(
+                    b=>b.no===old
                 )
             ){
 
@@ -2133,32 +1252,20 @@ function fillBusSelects(){
 
 
     /*
-       જો કોઈ selection ન હોય
-       તો પ્રથમ actual Excel Bus.
+       First real Excel Bus only.
+       No dummy buses.
     */
 
-    if(
-        db.buses.length
-    ){
+    if(db.buses.length){
 
-        let first =
+        let first=
             db.buses[0].no;
 
 
-        [
-            'eBus',
-            'fBus',
-            'oBus',
-            'mBus',
-            'iBus',
-            'sBus',
-            'rBus'
-        ]
-        .forEach(
+        ids.forEach(
             id=>{
 
                 let el=$(id);
-
 
                 if(
                     el &&
@@ -2174,6 +1281,35 @@ function fillBusSelects(){
 
     }
 
+
+    syncMake();
+
+}
+
+
+/* =========================================================
+   MAKE
+========================================================= */
+
+function syncMake(){
+
+    let bus=
+        $('eBus').value;
+
+
+    let b=
+        db.buses.find(
+            x=>x.no===bus
+        );
+
+
+    if(b){
+
+        $('eMake').value=
+            b.make||'';
+
+    }
+
 }
 
 
@@ -2183,17 +1319,17 @@ function fillBusSelects(){
 
 function addBus(){
 
-    let no =
+    let no=
         String(
-            $('bNo').value || ''
+            $('bNo').value||''
         )
         .trim()
         .toUpperCase();
 
 
-    let make =
+    let make=
         String(
-            $('bMake').value || ''
+            $('bMake').value||''
         )
         .trim();
 
@@ -2210,11 +1346,11 @@ function addBus(){
 
 
     if(
-        db.buses.length >= MAX_BUS
+        db.buses.length>=MAX_BUS
     ){
 
         alert(
-            'Maximum 75 BUS રાખી શકાય છે.'
+            'Maximum 75 Bus રાખી શકાય છે.'
         );
 
         return;
@@ -2224,10 +1360,11 @@ function addBus(){
 
     if(
         db.buses.some(
-            b =>
+            b=>
             String(b.no)
             .toUpperCase()
-            === no
+            ===
+            no
         )
     ){
 
@@ -2261,32 +1398,7 @@ function addBus(){
 
     $('bMake').value='';
 
-
     refresh();
-
-
-    [
-        'eBus',
-        'fBus',
-        'oBus',
-        'mBus',
-        'iBus',
-        'sBus',
-        'rBus'
-    ]
-    .forEach(
-        id=>{
-
-            if($(id))
-                $(id).value=no;
-
-        }
-    );
-
-
-    renderMaintenance();
-
-    renderReport();
 
 
     alert(
@@ -2304,24 +1416,15 @@ function renderBus(){
 
     if(!db.buses.length){
 
-        $('busBody').innerHTML =
-            `
-            <tr>
-                <td colspan="4">
-                    હજુ કોઈ BUS નથી.
-                    Excel Import કરો.
-                </td>
-            </tr>
-            `;
-
-
-        $('busFolders').innerHTML =
-            `
-            <div class="note">
-                હજુ કોઈ Bus નથી.
-            </div>
-            `;
-
+        $('busBody').innerHTML=
+        `
+        <tr>
+        <td colspan="4">
+        Bus નથી.
+        Excel Import કરો.
+        </td>
+        </tr>
+        `;
 
         return;
 
@@ -2331,8 +1434,8 @@ function renderBus(){
     $('busBody').innerHTML =
         db.buses
         .map(
-            b => `
-
+            b=>
+            `
             <tr>
 
                 <td>
@@ -2359,21 +1462,19 @@ function renderBus(){
 
                     <button
                         onclick="
-                            openBusFromMaster(
-                                '${esc(b.no)}'
-                            )
-                        "
+                        openBusMaintenance(
+                            '${esc(b.no)}'
+                        )"
                     >
-                        OPEN
+                        🔧 OPEN
                     </button>
 
                     <button
                         class="red"
                         onclick="
-                            deleteBus(
-                                '${esc(b.no)}'
-                            )
-                        "
+                        deleteBus(
+                            '${esc(b.no)}'
+                        )"
                     >
                         DELETE
                     </button>
@@ -2381,55 +1482,6 @@ function renderBus(){
                 </td>
 
             </tr>
-
-            `
-        )
-        .join('');
-
-
-    $('busFolders').innerHTML =
-        db.buses
-        .map(
-            b => `
-
-            <div
-                class="folder"
-                onclick="
-                    openBusFromMaster(
-                        '${esc(b.no)}'
-                    )
-                "
-            >
-
-                📁
-
-                <br>
-
-                <b>
-                    ${esc(b.no)}
-                </b>
-
-                <br>
-
-                <small>
-                    ${esc(b.make||'Make not set')}
-                </small>
-
-                <br>
-
-                <span class="badge">
-                    ${
-                        db.entries
-                        .filter(
-                            x=>x.bus===b.no
-                        )
-                        .length
-                    }
-                    rows
-                </span>
-
-            </div>
-
             `
         )
         .join('');
@@ -2438,36 +1490,16 @@ function renderBus(){
 
 
 /* =========================================================
-   OPEN BUS
+   OPEN BUS MAINTENANCE
 ========================================================= */
 
-function openBusFromMaster(no){
+function openBusMaintenance(no){
 
     show('maintenance');
 
+    $('mBus').value=no;
 
-    setTimeout(
-        ()=>{
-
-            if(
-                Array.from(
-                    $('mBus').options
-                )
-                .some(
-                    o=>o.value===no
-                )
-            ){
-
-                $('mBus').value=no;
-
-            }
-
-
-            renderMaintenance();
-
-        },
-        50
-    );
+    renderMaintenance();
 
 }
 
@@ -2509,28 +1541,25 @@ function deleteBus(no){
 
     delete db.baseDates[no];
 
-    delete db.programValues[no];
 
+    Object.keys(
+        db.programConfig
+    )
+    .forEach(
+        k=>{
 
-    Object
-        .keys(
-            db.programConfig
-        )
-        .forEach(
-            k=>{
+            if(
+                k.startsWith(
+                    no+'|'
+                )
+            ){
 
-                if(
-                    k.startsWith(
-                        no+'|'
-                    )
-                ){
-
-                    delete db.programConfig[k];
-
-                }
+                delete db.programConfig[k];
 
             }
-        );
+
+        }
+    );
 
 
     save();
@@ -2541,39 +1570,36 @@ function deleteBus(no){
 
 
 /* =========================================================
-   DATE WISE SAVE
+   DATE ENTRY
 ========================================================= */
 
 function saveDaily(){
 
-    let bus =
+    let bus=
         $('eBus').value;
 
 
-    let date =
+    let date=
         $('eDate').value;
 
 
-    let daily =
+    let daily=
         num(
             $('eDaily').value
         );
 
 
-    let docking =
+    let docking=
         num(
             $('eDocking').value
         );
 
 
-    let make =
+    let make=
         $('eMake').value.trim();
 
 
-    if(
-        !bus ||
-        !date
-    ){
+    if(!bus || !date){
 
         alert(
             'Bus અને Date પસંદ કરો'
@@ -2584,7 +1610,7 @@ function saveDaily(){
     }
 
 
-    let b =
+    let b=
         db.buses.find(
             x=>x.no===bus
         );
@@ -2605,7 +1631,7 @@ function saveDaily(){
         b.make=make;
 
 
-    let old =
+    let old=
         db.entries.find(
             x=>
             x.bus===bus &&
@@ -2637,11 +1663,7 @@ function saveDaily(){
     }
 
 
-    db.entries.sort(
-        (a,b)=>
-        a.date.localeCompare(b.date)
-    );
-
+    sortEntries();
 
     save();
 
@@ -2654,8 +1676,7 @@ function saveDaily(){
 
 
     alert(
-        'Daily KM SAVE થયું.\n\n' +
-        'Program KM automatic update થશે.'
+        'Daily KM save થયું.'
     );
 
 }
@@ -2670,15 +1691,31 @@ function clearEntry(){
 }
 
 
+function sortEntries(){
+
+    db.entries.sort(
+        (a,b)=>
+        String(a.date)
+        .localeCompare(
+            String(b.date)
+        )
+    );
+
+}
+
+
 /* =========================================================
-   BASE KM
+   BASE
 ========================================================= */
 
-function baseFor(bus,p){
+function baseFor(
+    bus,
+    p
+){
 
     return num(
         (
-            db.bases[bus] || {}
+            db.bases[bus]||{}
         )[p]
     );
 
@@ -2691,82 +1728,21 @@ function baseFor(bus,p){
 
 function getBaseDate(bus){
 
-    return (
-        db.baseDates[bus]
-        ||
-        ''
-    );
-
-}
-
-
-/* =========================================================
-   PROGRAM VALUE STORAGE
-========================================================= */
-
-/*
-   programValues:
-
-   db.programValues[bus][date][program]
-   = exact Excel program KM
-
-   This makes Maintenance Date-wise
-   program KM exact when Excel contains
-   a Program KM column.
-*/
-
-function setProgramValue(
-    bus,
-    date,
-    program,
-    value
-){
-
-    if(
-        !db.programValues[bus]
-    )
-        db.programValues[bus]={};
-
-
-    if(
-        !db.programValues[bus][date]
-    )
-        db.programValues[bus][date]={};
-
-
-    db.programValues[bus][date][program]
-        =num(value);
-
-}
-
-
-function getProgramValue(
-    bus,
-    date,
-    program
-){
-
-    if(
-        db.programValues[bus] &&
-        db.programValues[bus][date] &&
-        db.programValues[bus][date][program]
-            !==undefined
-    ){
-
-        return num(
-            db.programValues[bus][date][program]
-        );
-
-    }
-
-
-    return null;
+    return db.baseDates[bus]||'';
 
 }
 
 
 /* =========================================================
    PROGRAM KM
+
+   IMPORTANT:
+   Base + Daily KM after Base Date.
+
+   Example:
+   01-08 = 500000
+   02-08 daily = 4000
+   02-08 = 504000
 ========================================================= */
 
 function programKM(
@@ -2775,52 +1751,18 @@ function programKM(
     date
 ){
 
-    /*
-       1. Exact Excel date-wise value
-    */
-
-    let exact =
-        getProgramValue(
-            bus,
-            date,
-            p
-        );
-
-
-    if(
-        exact!==null
-    ){
-
-        return exact;
-
-    }
-
-
-    /*
-       2. Otherwise calculate:
-       Opening Base + Daily KM
-       AFTER base date.
-
-       એટલે જો:
-
-       01-08-26 = Base 500000
-       02-08-26 Daily = 4000
-
-       તો:
-
-       01-08 = 500000
-       02-08 = 504000
-    */
-
-    let total =
+    let base=
         baseFor(
             bus,
             p
         );
 
 
-    let baseDate =
+    let baseDate=
         getBaseDate(bus);
+
+
+    let total=base;
 
 
     db.entries
@@ -2834,14 +1776,14 @@ function programKM(
 
 
             if(
-                x.date > date
+                x.date>date
             )
                 return false;
 
 
             if(
                 baseDate &&
-                x.date <= baseDate
+                x.date<=baseDate
             )
                 return false;
 
@@ -2856,12 +1798,7 @@ function programKM(
     )
     .forEach(
         x=>{
-
-            total +=
-                num(
-                    x.daily
-                );
-
+            total+=num(x.daily);
         }
     );
 
@@ -2880,59 +1817,11 @@ function progressive(
     date
 ){
 
-    let total =
-        baseFor(
-            bus,
-            'VEH. PROG. KM'
-        );
-
-
-    let baseDate =
-        getBaseDate(bus);
-
-
-    db.entries
-    .filter(
-        x=>{
-
-            if(
-                x.bus!==bus
-            )
-                return false;
-
-
-            if(
-                x.date > date
-            )
-                return false;
-
-
-            if(
-                baseDate &&
-                x.date <= baseDate
-            )
-                return false;
-
-
-            return true;
-
-        }
-    )
-    .sort(
-        (a,b)=>
-        a.date.localeCompare(b.date)
-    )
-    .forEach(
-        x=>{
-
-            total +=
-                num(x.daily);
-
-        }
+    return programKM(
+        bus,
+        'VEH. PROG. KM',
+        date
     );
-
-
-    return total;
 
 }
 
@@ -2946,7 +1835,7 @@ function monthly(
     date
 ){
 
-    let m =
+    let m=
         String(date)
         .slice(0,7);
 
@@ -2972,19 +1861,19 @@ function monthly(
 
 function renderRegister(){
 
-    let bus =
+    let bus=
         $('fBus').value;
 
 
-    let month =
+    let month=
         $('fMonth').value;
 
 
-    let list =
+    let rows=
         db.entries
         .filter(
             x=>
-            (!bus || x.bus===bus) &&
+            x.bus===bus &&
             (
                 !month ||
                 x.date.startsWith(month)
@@ -2996,61 +1885,56 @@ function renderRegister(){
         );
 
 
-    $('regHead').innerHTML = `
+    $('regHead').innerHTML=
+    `
+    <tr>
 
-        <tr>
+        <th>DATE</th>
 
-            <th>DATE</th>
+        <th>BUS NO.</th>
 
-            <th>BUS NO.</th>
+        <th>DAILY KM</th>
 
-            <th>DAILY KM</th>
+        <th>MONTHLY KM</th>
 
-            <th>MONTHLY KM</th>
+        <th>PROGRESSIVE KM</th>
 
-            <th>PROGRESSIVE KM</th>
+        ${
+            PROGRAMS
+            .map(
+                p=>
+                `<th>${esc(p)}</th>`
+            )
+            .join('')
+        }
 
-            ${
-                PROGRAMS
-                .map(
-                    p =>
-                    `<th>${esc(p)}</th>`
-                )
-                .join('')
-            }
+        <th>ACTION</th>
 
-            <th>ACTION</th>
-
-        </tr>
-
+    </tr>
     `;
 
 
-    if(!list.length){
+    if(!rows.length){
 
-        $('regBody').innerHTML =
-            `
-            <tr>
-
-                <td colspan="${PROGRAMS.length+6}">
-
-                    કોઈ Date-wise KM entry નથી.
-
-                </td>
-
-            </tr>
-            `;
+        $('regBody').innerHTML=
+        `
+        <tr>
+        <td colspan="${PROGRAMS.length+6}">
+        આ Bus માટે KM નથી.
+        </td>
+        </tr>
+        `;
 
         return;
 
     }
 
 
-    $('regBody').innerHTML =
-        list
+    $('regBody').innerHTML=
+        rows
         .map(
-            x=>`
-
+            x=>
+            `
             <tr>
 
                 <td>
@@ -3058,55 +1942,41 @@ function renderRegister(){
                 </td>
 
                 <td>
-                    <b>
-                        ${esc(x.bus)}
-                    </b>
+                    <b>${esc(x.bus)}</b>
                 </td>
 
-                <td
-                    class="dailyCell"
-                >
+                <td class="dailyCell">
 
                     <input
                         type="number"
                         value="${num(x.daily)}"
                         style="width:90px"
                         onchange="
-                            editDaily(
-                                '${esc(x.bus)}',
-                                '${x.date}',
-                                this.value
-                            )
+                        editDaily(
+                            '${esc(x.bus)}',
+                            '${x.date}',
+                            this.value
+                        )
                         "
                     >
 
                 </td>
 
-                <td
-                    class="totalCell"
-                >
+                <td class="totalCell">
 
-                    ${
-                        monthly(
-                            x.bus,
-                            x.date
-                        )
-                        .toLocaleString('en-IN')
-                    }
+                    ${monthly(
+                        x.bus,
+                        x.date
+                    ).toLocaleString('en-IN')}
 
                 </td>
 
-                <td
-                    class="totalCell"
-                >
+                <td class="totalCell">
 
-                    ${
-                        progressive(
-                            x.bus,
-                            x.date
-                        )
-                        .toLocaleString('en-IN')
-                    }
+                    ${progressive(
+                        x.bus,
+                        x.date
+                    ).toLocaleString('en-IN')}
 
                 </td>
 
@@ -3114,7 +1984,9 @@ function renderRegister(){
                     PROGRAMS
                     .map(
                         p=>
-                        `<td>
+                        `
+                        <td class="programCell">
+
                             ${
                                 programKM(
                                     x.bus,
@@ -3123,7 +1995,9 @@ function renderRegister(){
                                 )
                                 .toLocaleString('en-IN')
                             }
-                        </td>`
+
+                        </td>
+                        `
                     )
                     .join('')
                 }
@@ -3133,10 +2007,10 @@ function renderRegister(){
                     <button
                         class="red"
                         onclick="
-                            deleteEntry(
-                                '${esc(x.bus)}',
-                                '${x.date}'
-                            )
+                        deleteEntry(
+                            '${esc(x.bus)}',
+                            '${x.date}'
+                        )
                         "
                     >
                         DELETE
@@ -3145,7 +2019,6 @@ function renderRegister(){
                 </td>
 
             </tr>
-
             `
         )
         .join('');
@@ -3159,17 +2032,17 @@ function editDaily(
     value
 ){
 
-    let row =
+    let x=
         db.entries.find(
-            x=>
-            x.bus===bus &&
-            x.date===date
+            e=>
+            e.bus===bus &&
+            e.date===date
         );
 
 
-    if(row){
+    if(x){
 
-        row.daily =
+        x.daily=
             Math.max(
                 0,
                 num(value)
@@ -3198,7 +2071,10 @@ function deleteEntry(
 
     if(
         !confirm(
-            'આ entry delete કરવી છે?'
+            bus+
+            ' ની '+
+            fmtDate(date)+
+            ' entry delete કરવી છે?'
         )
     )
         return;
@@ -3222,23 +2098,19 @@ function deleteEntry(
 
 
 /* =========================================================
-   OLD BASE DISPLAY
+   OLD BASE
 ========================================================= */
 
 function renderOldBase(){
 
-    let bus =
+    let bus=
         $('oBus').value;
 
 
     if(!bus){
 
-        $('oldGrid').innerHTML =
-            `
-            <div class="small">
-                Excel Import અથવા Bus Add કરો.
-            </div>
-            `;
+        $('oldGrid').innerHTML=
+            '<div class="small">Bus નથી.</div>';
 
         return;
 
@@ -3252,13 +2124,11 @@ function renderOldBase(){
     );
 
 
-    $('oldGrid').innerHTML =
+    $('oldGrid').innerHTML=
         PROGRAMS
         .map(
             (p,i)=>
-
             `
-
             <div class="busitem">
 
                 <b>
@@ -3274,7 +2144,6 @@ function renderOldBase(){
                 >
 
             </div>
-
             `
         )
         .join('');
@@ -3282,13 +2151,9 @@ function renderOldBase(){
 }
 
 
-/* =========================================================
-   SAVE OLD BASE
-========================================================= */
-
 function saveOldBase(){
 
-    let bus =
+    let bus=
         $('oBus').value;
 
 
@@ -3314,7 +2179,7 @@ function saveOldBase(){
 
             db.bases[bus][
                 x.dataset.p
-            ] =
+            ]=
                 num(
                     x.value
                 );
@@ -3323,11 +2188,7 @@ function saveOldBase(){
     );
 
 
-    /*
-       Base Date
-    */
-
-    db.baseDates[bus] =
+    db.baseDates[bus]=
         $('oDate').value;
 
 
@@ -3344,10 +2205,10 @@ function saveOldBase(){
 
 
 /* =========================================================
-   CONFIG KEY
+   INTERVAL
 ========================================================= */
 
-function key(
+function configKey(
     bus,
     p
 ){
@@ -3357,19 +2218,13 @@ function key(
 }
 
 
-/* =========================================================
-   INTERVAL
-========================================================= */
-
 function saveInterval(){
 
     let bus=
         $('iBus').value;
 
-
     let p=
         $('iProgram').value;
-
 
     let km=
         num(
@@ -3384,7 +2239,7 @@ function saveInterval(){
     ){
 
         alert(
-            'Bus, Program અને Interval નાખો'
+            'Bus, Program અને Interval નાખો.'
         );
 
         return;
@@ -3393,16 +2248,17 @@ function saveInterval(){
 
 
     db.programConfig[
-        key(bus,p)
+        configKey(bus,p)
     ]={
+
         interval:km
+
     };
 
 
     save();
 
     renderMaintenance();
-
 
     alert(
         'Interval save થયું.'
@@ -3412,76 +2268,85 @@ function saveInterval(){
 
 
 /* =========================================================
-   LAST SERVICE
+   SERVICE
 ========================================================= */
 
-function lastService(
+function serviceList(
     bus,
     p
 ){
 
     return db.services
-
     .filter(
         s=>
         s.bus===bus &&
         s.program===p
     )
-
     .sort(
         (a,b)=>
-        b.date.localeCompare(a.date)
-    )[0]
-    ||
-    null;
+        a.date.localeCompare(b.date)
+    );
 
 }
 
 
-/* =========================================================
-   SERVICE DONE
-========================================================= */
+function lastServiceForDate(
+    bus,
+    p,
+    date
+){
+
+    let list=
+        serviceList(
+            bus,
+            p
+        )
+        .filter(
+            s=>s.date<=date
+        );
+
+
+    return list.length
+        ?
+        list[list.length-1]
+        :
+        null;
+
+}
+
 
 function serviceDone(){
 
-    let bus =
+    let bus=
         $('sBus').value;
 
-
-    let p =
+    let p=
         $('sProgram').value;
 
-
-    let date =
+    let date=
         $('sDate').value;
 
-
-    let km =
+    let km=
         num(
             $('sKm').value
         );
 
 
     if(
-        !bus ||
-        !p ||
-        !date ||
+        !bus||
+        !p||
+        !date||
         km<=0
     ){
 
         alert(
-            'Bus, Program, Date અને Service KM નાખો'
+            'Bus, Program, Date અને Service KM નાખો.'
         );
 
         return;
 
     }
 
-
-    /*
-       Same date / same program
-       હોય તો જૂની service replace.
-    */
 
     db.services =
         db.services.filter(
@@ -3520,42 +2385,174 @@ function serviceDone(){
 
 
     alert(
-        'SERVICE DONE save થયું.\n\n' +
-        'Next Service KM automatic calculate થશે.'
+        'SERVICE DONE save થયું.'
     );
 
 }
 
 
 /* =========================================================
-   MAINTENANCE
+   STATUS
+========================================================= */
+
+function getStatus(
+    bus,
+    p,
+    date,
+    currentKM
+){
+
+    let cfg=
+        db.programConfig[
+            configKey(
+                bus,
+                p
+            )
+        ]
+        ||
+        {};
+
+
+    let interval=
+        num(cfg.interval);
+
+
+    if(
+        interval<=0
+    ){
+
+        return {
+            cls:'',
+            text:'',
+            due:''
+        };
+
+    }
+
+
+    let sv=
+        lastServiceForDate(
+            bus,
+            p,
+            date
+        );
+
+
+    if(!sv){
+
+        return {
+            cls:'',
+            text:'',
+            due:''
+        };
+
+    }
+
+
+    let due=
+        num(sv.km)+
+        interval;
+
+
+    let left=
+        due-currentKM;
+
+
+    if(
+        currentKM>=due
+    ){
+
+        return {
+            cls:'statusDue',
+            text:'🔴 DUE',
+            due:due,
+            left:left
+        };
+
+    }
+
+
+    if(
+        left<=SERVICE_NEAR_KM
+    ){
+
+        return {
+            cls:'statusNear',
+            text:'🟠 NEAR',
+            due:due,
+            left:left
+        };
+
+    }
+
+
+    return {
+        cls:'statusOK',
+        text:'🟢 OK',
+        due:due,
+        left:left
+    };
+
+}
+
+
+/* =========================================================
+   MAINTENANCE ALL PROGRAMS / ALL DATES
 ========================================================= */
 
 function renderMaintenance(){
 
-    let bus =
+    let bus=
         $('mBus').value;
 
 
-    let p =
-        $('mProgram').value
-        ||
-        PROGRAMS[0];
+    let from=
+        $('mFrom').value;
+
+
+    let to=
+        $('mTo').value;
+
+
+    /*
+       Header contains ALL Programs.
+    */
+
+    $('maintHead').innerHTML=
+    `
+    <tr>
+
+        <th>DATE</th>
+
+        <th>BUS NO.</th>
+
+        <th>DAILY KM</th>
+
+        ${
+            PROGRAMS
+            .map(
+                p=>
+                `<th>${esc(p)}</th>`
+            )
+            .join('')
+        }
+
+        <th>PROGRESSIVE KM</th>
+
+    </tr>
+    `;
 
 
     if(!bus){
 
-        $('maintBody').innerHTML =
-            `
-            <tr>
-
-                <td colspan="12">
-                    Bus પસંદ કરો.
-                </td>
-
-            </tr>
-            `;
-
+        $('maintBody').innerHTML=
+        `
+        <tr>
+        <td colspan="${PROGRAMS.length+4}">
+        BUS NO. પસંદ કરો.
+        </td>
+        </tr>
+        `;
 
         $('serviceHistory').innerHTML='';
 
@@ -3564,639 +2561,7 @@ function renderMaintenance(){
     }
 
 
-    let entries =
-        db.entries
-        .filter(
-            x=>x.bus===bus
-        )
-        .sort(
-            (a,b)=>
-            a.date.localeCompare(b.date)
-        );
-
-
-    let sv =
-        lastService(
-            bus,
-            p
-        );
-
-
-    let cfg =
-        db.programConfig[
-            key(bus,p)
-        ]
-        ||
-        {};
-
-
-    let interval =
-        num(
-            cfg.interval
-        );
-
-
-    /*
-       NEXT SERVICE
-    */
-
-    let due='';
-
-
-    if(
-        sv &&
-        interval>0
-    ){
-
-        due =
-            num(sv.km)
-            +
-            interval;
-
-    }
-
-
-    if(!entries.length){
-
-        /*
-           Base alone પણ બતાવવું.
-        */
-
-        let base =
-            baseFor(
-                bus,
-                p
-            );
-
-
-        $('maintBody').innerHTML =
-            `
-            <tr>
-
-                <td>
-                    ${getBaseDate(bus)
-                    ? fmtDate(getBaseDate(bus))
-                    : '-'}
-                </td>
-
-                <td>
-                    <b>${esc(bus)}</b>
-                </td>
-
-                <td>
-                    ${esc(p)}
-                </td>
-
-                <td>
-                    0
-                </td>
-
-                <td
-                    class="programCell"
-                >
-                    <b>
-                        ${base.toLocaleString('en-IN')}
-                    </b>
-                </td>
-
-                <td>
-                    ${base.toLocaleString('en-IN')}
-                </td>
-
-                <td>
-                    ${sv?fmtDate(sv.date):''}
-                </td>
-
-                <td>
-                    ${sv?num(sv.km).toLocaleString('en-IN'):''}
-                </td>
-
-                <td>
-                    ${interval?interval.toLocaleString('en-IN'):''}
-                </td>
-
-                <td>
-                    ${due?due.toLocaleString('en-IN'):''}
-                </td>
-
-                <td>
-                    ${
-                        due
-                        ?
-                        Math.max(
-                            0,
-                            due-base
-                        ).toLocaleString('en-IN')
-                        :
-                        ''
-                    }
-                </td>
-
-                <td>
-                    ${
-                        due
-                        ?
-                        (
-                            base>=due
-                            ?
-                            '<span class="dueText">🔴 DUE</span>'
-                            :
-                            '<span class="okText">🟢 OK</span>'
-                        )
-                        :
-                        '<span>⚪ NOT SET</span>'
-                    }
-                </td>
-
-            </tr>
-            `;
-
-
-        renderServiceHistory(
-            bus,
-            p
-        );
-
-
-        return;
-
-    }
-
-
-    $('maintBody').innerHTML =
-        entries
-        .map(
-            x=>{
-
-                /*
-                   DATE WISE DAILY KM
-                */
-
-                let dailyKM =
-                    num(
-                        x.daily
-                    );
-
-
-                /*
-                   Date-wise Program KM
-                */
-
-                let pk =
-                    programKM(
-                        bus,
-                        p,
-                        x.date
-                    );
-
-
-                /*
-                   Progressive
-                */
-
-                let prog =
-                    progressive(
-                        bus,
-                        x.date
-                    );
-
-
-                /*
-                   Remaining
-                */
-
-                let remaining =
-                    due !== ''
-                    ?
-                    due-pk
-                    :
-                    null;
-
-
-                /*
-                   STATUS
-                */
-
-                let rowClass='';
-
-                let status='⚪ NOT SET';
-
-                if(
-                    due !== ''
-                ){
-
-                    if(
-                        pk>=due
-                    ){
-
-                        rowClass=
-                            'statusDue';
-
-                        status=
-                            '<span class="dueText">🔴 SERVICE DUE</span>';
-
-                    }
-                    else if(
-                        remaining <=
-                        SERVICE_NEAR_KM
-                    ){
-
-                        rowClass=
-                            'statusNear';
-
-                        status=
-                            '<span class="nearText">🟠 SERVICE NEAR</span>';
-
-                    }
-                    else{
-
-                        rowClass=
-                            'statusOK';
-
-                        status=
-                            '<span class="okText">🟢 OK</span>';
-
-                    }
-
-                }
-                else if(
-                    sv
-                ){
-
-                    status=
-                        '<span class="okText">🟢 SERVICE DONE</span>';
-
-                    rowClass=
-                        'statusOK';
-
-                }
-
-
-                return `
-
-                <tr
-                    class="${rowClass}"
-                >
-
-                    <td>
-
-                        <b>
-                            ${fmtDate(x.date)}
-                        </b>
-
-                    </td>
-
-
-                    <td>
-
-                        <b>
-                            ${esc(bus)}
-                        </b>
-
-                    </td>
-
-
-                    <td>
-
-                        <b>
-                            ${esc(p)}
-                        </b>
-
-                    </td>
-
-
-                    <td
-                        class="dailyCell"
-                    >
-
-                        ${dailyKM
-                            .toLocaleString('en-IN')
-                        }
-
-                    </td>
-
-
-                    <td
-                        class="programCell"
-                    >
-
-                        ${
-                            pk
-                            .toLocaleString('en-IN')
-                        }
-
-                    </td>
-
-
-                    <td>
-
-                        ${
-                            prog
-                            .toLocaleString('en-IN')
-                        }
-
-                    </td>
-
-
-                    <td>
-
-                        ${
-                            sv
-                            ?
-                            fmtDate(sv.date)
-                            :
-                            ''
-                        }
-
-                    </td>
-
-
-                    <td>
-
-                        ${
-                            sv
-                            ?
-                            num(
-                                sv.km
-                            )
-                            .toLocaleString('en-IN')
-                            :
-                            ''
-                        }
-
-                    </td>
-
-
-                    <td>
-
-                        ${
-                            interval
-                            ?
-                            interval
-                            .toLocaleString('en-IN')
-                            :
-                            ''
-                        }
-
-                    </td>
-
-
-                    <td>
-
-                        ${
-                            due
-                            ?
-                            due
-                            .toLocaleString('en-IN')
-                            :
-                            ''
-                        }
-
-                    </td>
-
-
-                    <td>
-
-                        ${
-                            remaining !== null
-                            ?
-                            Math.max(
-                                0,
-                                remaining
-                            )
-                            .toLocaleString('en-IN')
-                            :
-                            ''
-                        }
-
-                    </td>
-
-
-                    <td>
-
-                        ${status}
-
-                    </td>
-
-                </tr>
-
-                `;
-
-            }
-        )
-        .join('');
-
-
-    renderServiceHistory(
-        bus,
-        p
-    );
-
-}
-
-
-/* =========================================================
-   SERVICE HISTORY
-========================================================= */
-
-function renderServiceHistory(
-    bus,
-    p
-){
-
-    let hist =
-        db.services
-        .filter(
-            s=>
-            s.bus===bus &&
-            s.program===p
-        )
-        .sort(
-            (a,b)=>
-            b.date.localeCompare(a.date)
-        );
-
-
-    $('serviceHistory').innerHTML =
-
-        '<h3>Service History - '+
-        esc(bus)+
-        ' / '+
-        esc(p)+
-        '</h3>'+
-
-        (
-
-            hist.length
-
-            ?
-
-            `
-            <div
-                class="tablebox"
-                style="max-height:300px"
-            >
-
-            <table
-                style="min-width:600px"
-            >
-
-            <tr>
-
-                <th>
-                    Date
-                </th>
-
-                <th>
-                    Program
-                </th>
-
-                <th>
-                    Service KM
-                </th>
-
-            </tr>
-
-            ${
-                hist
-                .map(
-                    s=>
-                    `
-                    <tr>
-
-                        <td>
-                            ${fmtDate(s.date)}
-                        </td>
-
-                        <td>
-                            ${esc(s.program)}
-                        </td>
-
-                        <td>
-                            ${
-                                num(s.km)
-                                .toLocaleString('en-IN')
-                            }
-                        </td>
-
-                    </tr>
-                    `
-                )
-                .join('')
-            }
-
-            </table>
-
-            </div>
-            `
-
-            :
-
-            `
-            <div class="small">
-                Service entry નથી.
-            </div>
-            `
-
-        );
-
-}
-
-
-/* =========================================================
-   SUMMARY BUS FOLDERS
-========================================================= */
-
-function renderSummaryFolders(){
-
-    if(!db.buses.length){
-
-        $('summaryFolders').innerHTML =
-            `
-            <div class="note">
-                હજુ કોઈ Bus નથી.
-                Excel Import કરો.
-            </div>
-            `;
-
-        return;
-
-    }
-
-
-    $('summaryFolders').innerHTML =
-        db.buses
-        .map(
-            b=>
-            `
-
-            <div
-                class="folder"
-                onclick="
-                    $('rBus').value='${esc(b.no)}';
-                    renderReport();
-                "
-            >
-
-                📁
-
-                <br>
-
-                <b>
-                    ${esc(b.no)}
-                </b>
-
-                <br>
-
-                <small>
-                    ${db.entries.filter(
-                        x=>x.bus===b.no
-                    ).length}
-                    Date Rows
-                </small>
-
-            </div>
-
-            `
-        )
-        .join('');
-
-}
-
-
-/* =========================================================
-   SUMMARY
-========================================================= */
-
-function renderReport(){
-
-    let bus =
-        $('rBus').value;
-
-
-    let from =
-        $('rFrom').value;
-
-
-    let to =
-        $('rTo').value;
-
-
-    renderSummaryFolders();
-
-
-    if(!bus){
-
-        $('reportStats').innerHTML='';
-        $('repHead').innerHTML='';
-        $('repBody').innerHTML='';
-
-        return;
-
-    }
-
-
-    let rows =
+    let rows=
         db.entries
         .filter(
             x=>
@@ -4210,7 +2575,412 @@ function renderReport(){
         );
 
 
-    let totalDaily =
+    if(!rows.length){
+
+        let baseDate=
+            getBaseDate(bus);
+
+
+        $('maintBody').innerHTML=
+        `
+        <tr>
+
+            <td>
+                ${baseDate?fmtDate(baseDate):'-'}
+            </td>
+
+            <td>
+                <b>${esc(bus)}</b>
+            </td>
+
+            <td>
+                0
+            </td>
+
+            ${
+                PROGRAMS
+                .map(
+                    p=>
+                    `
+                    <td class="programCell">
+
+                        ${
+                            baseFor(
+                                bus,
+                                p
+                            ).toLocaleString(
+                                'en-IN'
+                            )
+                        }
+
+                    </td>
+                    `
+                )
+                .join('')
+            }
+
+            <td>
+
+                ${
+                    baseFor(
+                        bus,
+                        'VEH. PROG. KM'
+                    ).toLocaleString(
+                        'en-IN'
+                    )
+                }
+
+            </td>
+
+        </tr>
+        `;
+
+
+        renderServiceHistoryAll(
+            bus
+        );
+
+        return;
+
+    }
+
+
+    $('maintBody').innerHTML=
+        rows
+        .map(
+            x=>{
+
+                let programCells=
+                    PROGRAMS
+                    .map(
+                        p=>{
+
+                            let value=
+                                programKM(
+                                    bus,
+                                    p,
+                                    x.date
+                                );
+
+
+                            let st=
+                                getStatus(
+                                    bus,
+                                    p,
+                                    x.date,
+                                    value
+                                );
+
+
+                            let title='';
+
+
+                            if(
+                                st.due
+                            ){
+
+                                title=
+                                    'Next Due: '+
+                                    st.due.toLocaleString(
+                                        'en-IN'
+                                    )+
+                                    ' | KM Left: '+
+                                    Math.max(
+                                        0,
+                                        st.left
+                                    ).toLocaleString(
+                                        'en-IN'
+                                    );
+
+                            }
+
+
+                            return `
+                            <td
+                                class="
+                                    programCell
+                                    ${st.cls}
+                                "
+                                title="${esc(title)}"
+                            >
+
+                                <b>
+                                ${
+                                    value
+                                    .toLocaleString(
+                                        'en-IN'
+                                    )
+                                }
+                                </b>
+
+                                ${
+                                    st.text
+                                    ?
+                                    `
+                                    <br>
+                                    <small>
+                                        ${st.text}
+                                    </small>
+                                    `
+                                    :
+                                    ''
+                                }
+
+                            </td>
+                            `;
+
+                        }
+                    )
+                    .join('');
+
+
+                return `
+                <tr>
+
+                    <td>
+                        <b>
+                            ${fmtDate(x.date)}
+                        </b>
+                    </td>
+
+                    <td>
+                        <b>
+                            ${esc(bus)}
+                        </b>
+                    </td>
+
+                    <td class="dailyCell">
+                        ${
+                            num(
+                                x.daily
+                            ).toLocaleString(
+                                'en-IN'
+                            )
+                        }
+                    </td>
+
+                    ${programCells}
+
+                    <td class="totalCell">
+                        ${
+                            progressive(
+                                bus,
+                                x.date
+                            ).toLocaleString(
+                                'en-IN'
+                            )
+                        }
+                    </td>
+
+                </tr>
+                `;
+
+            }
+        )
+        .join('');
+
+
+    renderServiceHistoryAll(
+        bus
+    );
+
+}
+
+
+/* =========================================================
+   SERVICE HISTORY
+========================================================= */
+
+function renderServiceHistoryAll(
+    bus
+){
+
+    let hist=
+        db.services
+        .filter(
+            s=>s.bus===bus
+        )
+        .sort(
+            (a,b)=>
+            b.date.localeCompare(a.date)
+        );
+
+
+    if(!hist.length){
+
+        $('serviceHistory').innerHTML=
+            '<div class="small">Service entry નથી.</div>';
+
+        return;
+
+    }
+
+
+    $('serviceHistory').innerHTML=
+    `
+    <h3>
+        🔧 Service History -
+        ${esc(bus)}
+    </h3>
+
+    <div
+        class="tablebox"
+        style="max-height:300px"
+    >
+
+    <table
+        style="min-width:650px"
+    >
+
+        <tr>
+
+            <th>DATE</th>
+
+            <th>PROGRAM</th>
+
+            <th>SERVICE KM</th>
+
+            <th>INTERVAL KM</th>
+
+            <th>NEXT DUE KM</th>
+
+        </tr>
+
+        ${
+            hist
+            .map(
+                s=>{
+
+                    let cfg=
+                        db.programConfig[
+                            configKey(
+                                s.bus,
+                                s.program
+                            )
+                        ]
+                        ||
+                        {};
+
+
+                    let interval=
+                        num(
+                            cfg.interval
+                        );
+
+
+                    let due=
+                        interval
+                        ?
+                        num(s.km)+interval
+                        :
+                        '';
+
+
+                    return `
+                    <tr>
+
+                        <td>
+                            ${fmtDate(s.date)}
+                        </td>
+
+                        <td>
+                            ${esc(s.program)}
+                        </td>
+
+                        <td>
+                            ${num(s.km)
+                            .toLocaleString('en-IN')}
+                        </td>
+
+                        <td>
+                            ${
+                                interval
+                                ?
+                                interval.toLocaleString('en-IN')
+                                :
+                                ''
+                            }
+                        </td>
+
+                        <td>
+                            ${
+                                due
+                                ?
+                                due.toLocaleString('en-IN')
+                                :
+                                ''
+                            }
+                        </td>
+
+                    </tr>
+                    `;
+
+                }
+            )
+            .join('')
+        }
+
+    </table>
+
+    </div>
+    `;
+
+}
+
+
+/* =========================================================
+   SUMMARY
+========================================================= */
+
+function renderReport(){
+
+    let bus=
+        $('rBus').value;
+
+
+    let from=
+        $('rFrom').value;
+
+
+    let to=
+        $('rTo').value;
+
+
+    if(!bus){
+
+        $('reportStats').innerHTML='';
+
+        $('repHead').innerHTML='';
+
+        $('repBody').innerHTML=
+        `
+        <tr>
+        <td>
+        BUS NO. પસંદ કરો.
+        </td>
+        </tr>
+        `;
+
+        return;
+
+    }
+
+
+    let rows=
+        db.entries
+        .filter(
+            x=>
+            x.bus===bus &&
+            (!from || x.date>=from) &&
+            (!to || x.date<=to)
+        )
+        .sort(
+            (a,b)=>
+            a.date.localeCompare(b.date)
+        );
+
+
+    let total=
         rows.reduce(
             (s,x)=>
             s+num(x.daily),
@@ -4218,28 +2988,12 @@ function renderReport(){
         );
 
 
-    let first =
+    let prog=
         rows.length
-        ?
-        rows[0].date
-        :
-        '';
-
-
-    let last =
-        rows.length
-        ?
-        rows[rows.length-1].date
-        :
-        '';
-
-
-    let progressiveEnd =
-        last
         ?
         progressive(
             bus,
-            last
+            rows[rows.length-1].date
         )
         :
         baseFor(
@@ -4248,7 +3002,7 @@ function renderReport(){
         );
 
 
-    let services =
+    let services=
         db.services
         .filter(
             s=>s.bus===bus
@@ -4256,143 +3010,120 @@ function renderReport(){
         .length;
 
 
-    $('reportStats').innerHTML =
+    $('reportStats').innerHTML=
+    `
 
-        `
+    <div class="summaryCard">
 
-        <div class="summaryCard">
+        <strong>
+            ${esc(bus)}
+        </strong>
 
-            <strong>
-                ${rows.length}
-            </strong>
+        BUS NO.
 
-            Date Rows
-
-        </div>
-
-
-        <div class="summaryCard">
-
-            <strong>
-                ${
-                    totalDaily
-                    .toLocaleString('en-IN')
-                }
-            </strong>
-
-            Daily KM
-
-        </div>
+    </div>
 
 
-        <div class="summaryCard">
+    <div class="summaryCard">
 
-            <strong>
-                ${
-                    progressiveEnd
-                    .toLocaleString('en-IN')
-                }
-            </strong>
+        <strong>
+            ${rows.length}
+        </strong>
 
-            Progressive KM
+        DATE ROWS
 
-        </div>
+    </div>
 
 
-        <div class="summaryCard">
+    <div class="summaryCard">
 
-            <strong>
-                ${services}
-            </strong>
+        <strong>
+            ${total.toLocaleString('en-IN')}
+        </strong>
 
-            Service Done
+        DAILY KM
 
-        </div>
-
-
-        <div class="summaryCard">
-
-            <strong>
-                ${esc(bus)}
-            </strong>
-
-            Bus
-
-        </div>
-
-        `;
+    </div>
 
 
-    $('repHead').innerHTML =
+    <div class="summaryCard">
 
-        `
+        <strong>
+            ${prog.toLocaleString('en-IN')}
+        </strong>
 
-        <tr>
+        PROGRESSIVE KM
 
-        <th>
-            DATE
-        </th>
+    </div>
 
-        <th>
-            BUS NO.
-        </th>
 
-        <th>
-            DAILY KM
-        </th>
+    <div class="summaryCard">
 
-        <th>
-            MONTHLY KM
-        </th>
+        <strong>
+            ${services}
+        </strong>
 
-        <th>
-            PROGRESSIVE KM
-        </th>
+        SERVICE DONE
+
+    </div>
+
+    `;
+
+
+    $('repHead').innerHTML=
+    `
+    <tr>
+
+        <th>DATE</th>
+
+        <th>BUS NO.</th>
+
+        <th>DAILY KM</th>
+
+        <th>MONTHLY KM</th>
+
+        <th>PROGRESSIVE KM</th>
 
         ${
             PROGRAMS
             .map(
-                p =>
+                p=>
                 `<th>${esc(p)}</th>`
             )
             .join('')
         }
 
-        </tr>
-
-        `;
+    </tr>
+    `;
 
 
     if(!rows.length){
 
-        $('repBody').innerHTML =
+        $('repBody').innerHTML=
+        `
+        <tr>
 
-            `
-            <tr>
+            <td
+                colspan="${PROGRAMS.length+5}"
+            >
 
-                <td
-                    colspan="${PROGRAMS.length+5}"
-                >
+                આ Bus માટે Summary data નથી.
 
-                    આ Bus માટે
-                    Date-wise KM નથી.
+            </td>
 
-                </td>
-
-            </tr>
-            `;
+        </tr>
+        `;
 
         return;
 
     }
 
 
-    $('repBody').innerHTML =
+    $('repBody').innerHTML=
         rows
         .map(
             x=>
             `
-
             <tr>
 
                 <td>
@@ -4405,63 +3136,50 @@ function renderReport(){
                     </b>
                 </td>
 
-                <td
-                    class="dailyCell"
-                >
-
+                <td class="dailyCell">
                     ${
                         num(x.daily)
                         .toLocaleString('en-IN')
                     }
-
                 </td>
 
-                <td
-                    class="totalCell"
-                >
-
+                <td>
                     ${
                         monthly(
                             x.bus,
                             x.date
+                        ).toLocaleString(
+                            'en-IN'
                         )
-                        .toLocaleString('en-IN')
                     }
-
                 </td>
 
-                <td
-                    class="totalCell"
-                >
-
+                <td>
                     ${
                         progressive(
                             x.bus,
                             x.date
+                        ).toLocaleString(
+                            'en-IN'
                         )
-                        .toLocaleString('en-IN')
                     }
-
                 </td>
 
                 ${
                     PROGRAMS
                     .map(
-                        p =>
+                        p=>
                         `
                         <td>
-
                             ${
                                 programKM(
                                     x.bus,
                                     p,
                                     x.date
-                                )
-                                .toLocaleString(
+                                ).toLocaleString(
                                     'en-IN'
                                 )
                             }
-
                         </td>
                         `
                     )
@@ -4469,7 +3187,6 @@ function renderReport(){
                 }
 
             </tr>
-
             `
         )
         .join('');
@@ -4483,15 +3200,15 @@ function renderReport(){
 
 function dashboard(){
 
-    $('sBus').textContent =
+    $('sBus').textContent=
         db.buses.length;
 
 
-    $('sEntry').textContent =
+    $('sEntry').textContent=
         db.entries.length;
 
 
-    $('sKm').textContent =
+    $('sKm').textContent=
         db.entries
         .reduce(
             (s,x)=>
@@ -4503,43 +3220,152 @@ function dashboard(){
         );
 
 
-    $('sService').textContent =
+    $('sService').textContent=
         db.services.length;
 
 }
 
 
 /* =========================================================
-   EXCEL NORMALIZE
+   EXCEL HEADER NORMALIZE
 ========================================================= */
 
 function normalizeHeader(v){
 
     return String(v??'')
-    .trim()
-    .toUpperCase()
-    .replace(/\n/g,' ')
-    .replace(/\s+/g,' ')
-    .replace(/[._]/g,'')
-    .trim();
+        .trim()
+        .toUpperCase()
+        .replace(/\n/g,' ')
+        .replace(/\s+/g,' ')
+        .replace(/[._]/g,'')
+        .trim();
 
 }
 
 
 /* =========================================================
-   EXCEL MONTH YEAR
+   NORMAL DATE
+========================================================= */
+
+function normalizeDateValue(v){
+
+    if(v instanceof Date && !isNaN(v.getTime())){
+
+        return (
+            v.getFullYear()
+            +'-'+
+            pad(v.getMonth()+1)
+            +'-'+
+            pad(v.getDate())
+        );
+
+    }
+
+
+    if(typeof v==='number' && v>20000){
+
+        try{
+
+            let d=
+                XLSX.SSF.parse_date_code(
+                    v
+                );
+
+
+            if(d){
+
+                return (
+                    d.y+
+                    '-'+
+                    pad(d.m)+
+                    '-'+
+                    pad(d.d)
+                );
+
+            }
+
+        }
+        catch(e){}
+
+    }
+
+
+    let s=
+        String(v??'')
+        .trim();
+
+
+    if(
+        /^\d{1,2}[-\/]\d{1,2}[-\/]\d{2,4}$/
+        .test(s)
+    ){
+
+        let p=
+            s.split(
+                /[-\/]/
+            );
+
+
+        let y=
+            Number(p[2]);
+
+
+        if(y<100)
+            y+=2000;
+
+
+        return (
+            y+
+            '-'+
+            pad(Number(p[1]))+
+            '-'+
+            pad(Number(p[0]))
+        );
+
+    }
+
+
+    if(
+        /^\d{4}[-\/]\d{1,2}[-\/]\d{1,2}$/
+        .test(s)
+    ){
+
+        let p=
+            s.split(
+                /[-\/]/
+            );
+
+
+        return (
+            p[0]+
+            '-'+
+            pad(Number(p[1]))+
+            '-'+
+            pad(Number(p[2]))
+        );
+
+    }
+
+
+    return s;
+
+}
+
+
+/* =========================================================
+   MONTH / YEAR FROM FILE NAME
 ========================================================= */
 
 function parseMonthYear(
     name
 ){
 
-    let s =
+    let s=
         String(name||'')
         .toUpperCase();
 
 
-    let m =
+    let m=
         s.match(
             /(JANUARY|FEBRUARY|MARCH|APRIL|MAY|JUNE|JULY|AUGUST|SEPTEMBER|OCTOBER|NOVEMBER|DECEMBER)[\s_-]*(20\d{2})/
         );
@@ -4558,7 +3384,7 @@ function parseMonthYear(
     }
 
 
-    m =
+    m=
         s.match(
             /(20\d{2})[\s_-]*(JANUARY|FEBRUARY|MARCH|APRIL|MAY|JUNE|JULY|AUGUST|SEPTEMBER|OCTOBER|NOVEMBER|DECEMBER)/
         );
@@ -4577,19 +3403,857 @@ function parseMonthYear(
     }
 
 
+    return {
+
+        y:new Date().getFullYear(),
+
+        m:new Date().getMonth()+1
+
+    };
+
+}
+
+
+/* =========================================================
+   FIND DATE / DAILY HEADER
+========================================================= */
+
+function findHeader(
+    matrix
+){
+
+    for(
+        let i=0;
+        i<Math.min(
+            15,
+            matrix.length
+        );
+        i++
+    ){
+
+        let h=
+            (
+                matrix[i]||[]
+            )
+            .map(
+                normalizeHeader
+            );
+
+
+        let dateCol=
+            h.indexOf('DATE');
+
+
+        let dailyCol=
+            -1;
+
+
+        [
+            'DAILY KM',
+            'DAILYKM',
+            'DEALY KM',
+            'DEALYKM'
+        ]
+        .some(
+            x=>{
+
+                dailyCol=
+                    h.indexOf(
+                        normalizeHeader(x)
+                    );
+
+                return dailyCol>=0;
+
+            }
+        );
+
+
+        if(
+            dateCol>=0 &&
+            dailyCol>=0
+        ){
+
+            return {
+
+                row:i,
+
+                dateCol:dateCol,
+
+                dailyCol:dailyCol
+
+            };
+
+        }
+
+    }
+
+
     return null;
 
 }
 
 
 /* =========================================================
-   EXCEL DATE PARSER
+   FIND OPENING ROW
 ========================================================= */
 
-function parseExcelDate(
+function findOpeningRow(
+    matrix,
+    headerRow
+){
+
+    for(
+        let r=headerRow+1;
+        r<Math.min(
+            headerRow+8,
+            matrix.length
+        );
+        r++
+    ){
+
+        let row=
+            matrix[r]||[];
+
+
+        for(
+            let c=0;
+            c<Math.min(
+                5,
+                row.length
+            );
+            c++
+        ){
+
+            if(
+                normalizeHeader(
+                    row[c]
+                )
+                ===
+                'OPENING'
+            ){
+
+                return r;
+
+            }
+
+        }
+
+    }
+
+
+    return -1;
+
+}
+
+
+/* =========================================================
+   FIND MAKE
+========================================================= */
+
+function findMake(
+    matrix
+){
+
+    for(
+        let r=0;
+        r<Math.min(
+            5,
+            matrix.length
+        );
+        r++
+    ){
+
+        let row=
+            matrix[r]||[];
+
+
+        for(
+            let c=0;
+            c<row.length-1;
+            c++
+        ){
+
+            if(
+                normalizeHeader(
+                    row[c]
+                )
+                ===
+                'MAKE'
+            ){
+
+                return String(
+                    row[c+1]||''
+                ).trim();
+
+            }
+
+        }
+
+    }
+
+
+    return '';
+
+}
+
+
+/* =========================================================
+   BUS NO = SHEET NAME
+========================================================= */
+
+function sheetBusNo(
+    sheetName
+){
+
+    return String(
+        sheetName||''
+    ).trim();
+
+}
+
+
+/* =========================================================
+   PROGRAM COLUMN NAME
+========================================================= */
+
+function programFromHeader(
+    name
+){
+
+    let n=
+        normalizeHeader(
+            name
+        );
+
+
+    if(
+        n==='DOCKING KM'
+    )
+        return 'DOCKING KM';
+
+
+    if(
+        n==='ENGINE OIL CHANGE KM'
+    )
+        return 'ENGINE OIL CHANGE KM';
+
+
+    if(
+        n==='VEH PROG KM' ||
+        n==='VEHPROG KM'
+    )
+        return 'VEH. PROG. KM';
+
+
+    if(
+        n==='BREATHER CARTRIDGE KM'
+    )
+        return 'BREATHER CARTRIDGE KM';
+
+
+    if(
+        n==='FUEL FILT CUM WATER SEP' ||
+        n==='FUEL FILT CUM WATER SEP KM'
+    )
+        return 'FUEL FILT CUM WATER SEP KM';
+
+
+    if(
+        n==='UREA FILTER'
+    )
+        return 'UREA FILTER';
+
+
+    if(
+        n==='PRI AIR FILTER'
+    )
+        return 'PRI. AIR FILTER';
+
+
+    if(
+        n==='SEC AIR FILTER'
+    )
+        return 'SEC. AIR FILTER';
+
+
+    if(
+        n==='GEAR OIL CHANGE'
+    )
+        return 'GEAR OIL CHANGE';
+
+
+    if(
+        n==='DIFF OIL CHANGE'
+    )
+        return 'DIFF. OIL CHANGE';
+
+
+    if(
+        n==='POWER ST KM' ||
+        n==='POWER ST'
+    )
+        return 'POWER STEERING OIL KM';
+
+
+    if(
+        n==='RADIATOR COOLENT' ||
+        n==='RADIATOR COOLANT'
+    )
+        return 'RADIATOR COOLANT';
+
+
+    if(
+        n==='SERVICE KIT DOSING KM' ||
+        n==='SERVICE KIT DOSING'
+    )
+        return 'SERVICE KIT DOSING KM';
+
+
+    return null;
+
+}
+
+
+/* =========================================================
+   IMPORT EXCEL
+========================================================= */
+
+function importExcel(
+    ev
+){
+
+    let file=
+        ev.target.files[0];
+
+
+    if(!file)
+        return;
+
+
+    if(
+        typeof XLSX==='undefined'
+    ){
+
+        alert(
+            'Excel library load નથી થઈ.\nInternet ON કરો.'
+        );
+
+        ev.target.value='';
+
+        return;
+
+    }
+
+
+    let reader=
+        new FileReader();
+
+
+    reader.onload=
+    function(e){
+
+        try{
+
+            let wb=
+                XLSX.read(
+                    e.target.result,
+                    {
+                        type:'array',
+                        cellDates:true,
+                        raw:true
+                    }
+                );
+
+
+            let my=
+                parseMonthYear(
+                    file.name
+                );
+
+
+            let totalSheets=0;
+
+            let totalRows=0;
+
+            let totalKM=0;
+
+            let created=0;
+
+            let skipped=0;
+
+            let imported=[];
+
+
+            wb.SheetNames.forEach(
+            sheetName=>{
+
+                let sName=
+                    String(
+                        sheetName
+                    ).trim();
+
+
+                /*
+                   Skip non-bus sheets.
+                */
+
+                let skip=
+                    sName.toUpperCase();
+
+
+                if(
+                    skip==='HOME' ||
+                    skip==='BUS MASTER' ||
+                    skip==='SUMMARY' ||
+                    skip==='SERVICE SUMMARY' ||
+                    skip==='PROGRAM BASE'
+                ){
+
+                    return;
+
+                }
+
+
+                let ws=
+                    wb.Sheets[sName];
+
+
+                let matrix=
+                    XLSX.utils
+                    .sheet_to_json(
+                        ws,
+                        {
+                            header:1,
+                            defval:'',
+                            raw:true
+                        }
+                    );
+
+
+                if(!matrix.length){
+
+                    skipped++;
+
+                    return;
+
+                }
+
+
+                let hdr=
+                    findHeader(
+                        matrix
+                    );
+
+
+                if(!hdr){
+
+                    skipped++;
+
+                    return;
+
+                }
+
+
+                /*
+                   Sheet Name = actual Bus No.
+                */
+
+                let busNo=
+                    sheetBusNo(
+                        sName
+                    );
+
+
+                if(!busNo){
+
+                    skipped++;
+
+                    return;
+
+                }
+
+
+                /*
+                   Find Bus by exact sheet name.
+                */
+
+                let b=
+                    db.buses.find(
+                        x=>
+                        String(x.no)
+                        .trim()
+                        .toUpperCase()
+                        ===
+                        busNo.toUpperCase()
+                    );
+
+
+                if(!b){
+
+                    if(
+                        db.buses.length>=MAX_BUS
+                    ){
+
+                        skipped++;
+
+                        return;
+
+                    }
+
+
+                    b={
+
+                        no:busNo,
+
+                        make:''
+
+                    };
+
+
+                    db.buses.push(b);
+
+                    created++;
+
+                }
+
+
+                let make=
+                    findMake(
+                        matrix
+                    );
+
+
+                if(make)
+                    b.make=make;
+
+
+                ensureBus(b);
+
+
+                /*
+                   Header
+                */
+
+                let headerRow=
+                    hdr.row;
+
+
+                let dateCol=
+                    hdr.dateCol;
+
+
+                let dailyCol=
+                    hdr.dailyCol;
+
+
+                /*
+                   Opening row may be:
+                   header+2 OR header+3
+                   depending on sheet.
+                */
+
+                let openingRow=
+                    findOpeningRow(
+                        matrix,
+                        headerRow
+                    );
+
+
+                /*
+                   Interval/program columns from header.
+                */
+
+                let headers=
+                    (
+                        matrix[
+                            headerRow
+                        ]||[]
+                    )
+                    .map(
+                        normalizeHeader
+                    );
+
+
+                let programCols=[];
+
+
+                for(
+                    let c=0;
+                    c<headers.length;
+                    c++
+                ){
+
+                    let p=
+                        programFromHeader(
+                            headers[c]
+                        );
+
+
+                    if(p){
+
+                        programCols.push({
+
+                            col:c,
+
+                            program:p
+
+                        });
+
+                    }
+
+                }
+
+
+                /*
+                   Opening values
+                */
+
+                if(
+                    openingRow>=0
+                ){
+
+                    db.baseDates[
+                        b.no
+                    ] =
+                        my.y+
+                        '-'+
+                        pad(my.m)+
+                        '-01';
+
+
+                    for(
+                        let pc of programCols
+                    ){
+
+                        let v=
+                            toNumber(
+                                matrix[
+                                    openingRow
+                                ][pc.col]
+                            );
+
+
+                        db.bases[
+                            b.no
+                        ][pc.program]=v;
+
+                    }
+
+                }
+
+
+                /*
+                   Daily rows.
+
+                   IMPORTANT:
+                   We start after Opening.
+                   This reads ALL date rows.
+                */
+
+                let startRow=
+                    openingRow>=0
+                    ?
+                    openingRow+1
+                    :
+                    headerRow+1;
+
+
+                let added=0;
+
+
+                for(
+                    let r=startRow;
+                    r<matrix.length;
+                    r++
+                ){
+
+                    let row=
+                        matrix[r]||[];
+
+
+                    let rawDate=
+                        row[dateCol];
+
+
+                    /*
+                       Excel date can be:
+                       - 1
+                       - 01
+                       - 01/08/2026
+                       - Excel serial
+                       - JS Date
+                    */
+
+                    let d=
+                        parseDailyDate(
+                            rawDate,
+                            my
+                        );
+
+
+                    if(!d)
+                        continue;
+
+
+                    let date=
+                        d.y+
+                        '-'+
+                        pad(d.m)+
+                        '-'+
+                        pad(d.d);
+
+
+                    let daily=
+                        toNumber(
+                            row[dailyCol]
+                        );
+
+
+                    /*
+                       Existing row -> update
+                    */
+
+                    let old=
+                        db.entries.find(
+                            x=>
+                            x.bus===b.no &&
+                            x.date===date
+                        );
+
+
+                    if(old){
+
+                        old.daily=
+                            daily;
+
+                    }
+                    else{
+
+                        db.entries.push({
+
+                            bus:b.no,
+
+                            date:date,
+
+                            daily:daily,
+
+                            docking:0
+
+                        });
+
+                    }
+
+
+                    /*
+                       Important:
+                       Program values are NOT imported
+                       as fixed zeros.
+
+                       They are calculated from
+                       Opening Base + cumulative Daily KM.
+
+                       This fixes formulas/cached-value issue.
+                    */
+
+
+                    totalRows++;
+
+                    totalKM+=daily;
+
+                    added++;
+
+
+                }
+
+
+                if(added){
+
+                    totalSheets++;
+
+                    imported.push(
+                        b.no+
+                        ' ('+
+                        added+
+                        ' dates)'
+                    );
+
+                }
+
+            });
+
+
+            sortEntries();
+
+            sortBuses();
+
+            save();
+
+            refresh();
+
+
+            alert(
+
+                '✅ EXCEL IMPORT COMPLETE\n\n'+
+
+                'BUS SHEETS: '+
+                totalSheets+
+
+                '\nDATE ROWS: '+
+                totalRows+
+
+                '\nDAILY KM: '+
+                totalKM.toLocaleString(
+                    'en-IN'
+                )+
+
+                '\nNEW BUS: '+
+                created+
+
+                '\nSKIPPED SHEETS: '+
+                skipped+
+
+                '\n\n'+
+
+                imported
+                .slice(
+                    0,
+                    30
+                )
+                .join('\n')
+
+            );
+
+        }
+        catch(err){
+
+            console.error(err);
+
+
+            alert(
+                '❌ EXCEL IMPORT ERROR\n\n'+
+                err.message
+            );
+
+        }
+
+
+        ev.target.value='';
+
+    };
+
+
+    reader.readAsArrayBuffer(file);
+
+}
+
+
+/* =========================================================
+   PARSE DAILY DATE
+========================================================= */
+
+function parseDailyDate(
     value,
-    fallbackYear,
-    fallbackMonth
+    my
 ){
 
     /*
@@ -4598,7 +4262,9 @@ function parseExcelDate(
 
     if(
         value instanceof Date &&
-        !isNaN(value.getTime())
+        !isNaN(
+            value.getTime()
+        )
     ){
 
         return {
@@ -4619,46 +4285,54 @@ function parseExcelDate(
     */
 
     if(
-        typeof value === 'number' &&
-        value > 20000
+        typeof value==='number' &&
+        value>20000
     ){
 
-        let d =
-            XLSX.SSF.parse_date_code(
-                value
-            );
+        try{
+
+            let d=
+                XLSX.SSF.parse_date_code(
+                    value
+                );
 
 
-        if(d){
+            if(d){
 
-            return {
+                return {
 
-                y:d.y,
+                    y:d.y,
 
-                m:d.m,
+                    m:d.m,
 
-                d:d.d
+                    d:d.d
 
-            };
+                };
+
+            }
 
         }
+        catch(e){}
 
     }
 
 
-    let s =
+    let s=
         String(
             value??''
         )
         .trim();
 
 
+    if(!s)
+        return null;
+
+
     /*
        DD-MM-YYYY
-       DD/MM/YYYY
     */
 
-    let m =
+    let m=
         s.match(
             /^(\d{1,2})[-\/](\d{1,2})[-\/](\d{2,4})$/
         );
@@ -4666,12 +4340,14 @@ function parseExcelDate(
 
     if(m){
 
-        let y =
-            Number(m[3]);
+        let y=
+            Number(
+                m[3]
+            );
 
 
         if(y<100)
-            y += 2000;
+            y+=2000;
 
 
         return {
@@ -4691,7 +4367,7 @@ function parseExcelDate(
        YYYY-MM-DD
     */
 
-    m =
+    m=
         s.match(
             /^(20\d{2})[-\/](\d{1,2})[-\/](\d{1,2})$/
         );
@@ -4713,10 +4389,17 @@ function parseExcelDate(
 
 
     /*
-       Only DAY
+       Only Day Number
+
+       Actual Excel format:
+       1
+       2
+       3
+       ...
+       31
     */
 
-    let n =
+    let n=
         num(s);
 
 
@@ -4728,9 +4411,9 @@ function parseExcelDate(
 
         return {
 
-            y:fallbackYear,
+            y:my.y,
 
-            m:fallbackMonth,
+            m:my.m,
 
             d:n
 
@@ -4740,1078 +4423,6 @@ function parseExcelDate(
 
 
     return null;
-
-}
-
-
-/* =========================================================
-   FIND HEADER
-========================================================= */
-
-function findHeader(
-    matrix
-){
-
-    for(
-        let i=0;
-        i<Math.min(
-            15,
-            matrix.length
-        );
-        i++
-    ){
-
-        let h =
-            (matrix[i]||[])
-            .map(
-                normalizeHeader
-            );
-
-
-        let hasDate =
-            h.includes('DATE');
-
-
-        let hasDaily =
-            h.includes('DAILY KM')
-            ||
-            h.includes('DAILYKM')
-            ||
-            h.includes('DEALY KM')
-            ||
-            h.includes('DEALYKM');
-
-
-        if(
-            hasDate &&
-            hasDaily
-        ){
-
-            return i;
-
-        }
-
-    }
-
-
-    return -1;
-
-}
-
-
-/* =========================================================
-   FIND SHEET BUS
-========================================================= */
-
-function sheetBusNo(
-    sheetName
-){
-
-    /*
-       IMPORTANT:
-       Sheet name itself is Bus No.
-
-       3868 -> 3868
-       2492 -> 2492
-       BUS-12 -> BUS-12
-    */
-
-    let s =
-        String(
-            sheetName||''
-        )
-        .trim();
-
-
-    return s;
-
-}
-
-
-/* =========================================================
-   MAKE
-========================================================= */
-
-function sheetMake(
-    matrix
-){
-
-    for(
-        let i=0;
-        i<Math.min(
-            8,
-            matrix.length
-        );
-        i++
-    ){
-
-        let row =
-            matrix[i]||[];
-
-
-        for(
-            let j=0;
-            j<row.length-1;
-            j++
-        ){
-
-            if(
-                normalizeHeader(
-                    row[j]
-                )
-                ===
-                'MAKE'
-            ){
-
-                return String(
-                    row[j+1]||''
-                ).trim();
-
-            }
-
-        }
-
-    }
-
-
-    return '';
-
-}
-
-
-/* =========================================================
-   PROGRAM FROM HEADER
-========================================================= */
-
-function programFromHeader(
-    name
-){
-
-    let x =
-        normalizeHeader(
-            name
-        );
-
-
-    if(
-        x==='DOCKING KM'
-    )
-        return 'DOCKING KM';
-
-
-    if(
-        x==='ENGINE OIL CHANGE KM'
-    )
-        return 'ENGINE OIL CHANGE KM';
-
-
-    if(
-        x==='VEH PROG KM' ||
-        x==='VEHPROG KM' ||
-        x==='VEH PROG'
-    )
-        return 'VEH. PROG. KM';
-
-
-    if(
-        x==='BREATHER CARTRIDGE KM' ||
-        x==='BREATHERCARTRIDGE KM'
-    )
-        return 'BREATHER CARTRIDGE KM';
-
-
-    if(
-        x==='FUEL FILT CUM WATER SEP' ||
-        x==='FUEL FILT CUM WATER SEP KM'
-    )
-        return 'FUEL FILT CUM WATER SEP KM';
-
-
-    if(
-        x==='UREA FILTER'
-    )
-        return 'UREA FILTER';
-
-
-    if(
-        x==='PRI AIR FILTER' ||
-        x==='PRIAIR FILTER'
-    )
-        return 'PRI. AIR FILTER';
-
-
-    if(
-        x==='SEC AIR FILTER' ||
-        x==='SECAIR FILTER'
-    )
-        return 'SEC. AIR FILTER';
-
-
-    if(
-        x==='GEAR OIL CHANGE'
-    )
-        return 'GEAR OIL CHANGE';
-
-
-    if(
-        x==='DIFF OIL CHANGE'
-    )
-        return 'DIFF. OIL CHANGE';
-
-
-    if(
-        x==='POWER ST KM' ||
-        x==='POWER ST WITH FLT 80K &120K' ||
-        x==='POWER ST'
-    )
-        return 'POWER STEERING OIL KM';
-
-
-    if(
-        x==='RADIATOR COOLENT' ||
-        x==='RADIATOR COOLANT'
-    )
-        return 'RADIATOR COOLANT';
-
-
-    if(
-        x==='SERVICE KIT DOSING KM' ||
-        x==='SERVICE KIT DOSING'
-    )
-        return 'SERVICE KIT DOSING KM';
-
-
-    return null;
-
-}
-
-
-/* =========================================================
-   FIND OPENING ROW
-========================================================= */
-
-function findOpeningRow(
-    matrix,
-    header
-){
-
-    for(
-        let r=header+1;
-        r<Math.min(
-            header+6,
-            matrix.length
-        );
-        r++
-    ){
-
-        let first =
-            normalizeHeader(
-                (
-                    matrix[r]||[]
-                )[0]
-            );
-
-
-        if(
-            first==='OPENING'
-        ){
-
-            return r;
-
-        }
-
-    }
-
-
-    return -1;
-
-}
-
-
-/* =========================================================
-   IMPORT EXCEL
-========================================================= */
-
-function importExcel(
-    ev
-){
-
-    let file =
-        ev.target.files[0];
-
-
-    if(!file)
-        return;
-
-
-    if(
-        typeof XLSX ===
-        'undefined'
-    ){
-
-        alert(
-            'Excel library load નથી થઈ.\n' +
-            'Internet ચાલુ કરો.'
-        );
-
-        ev.target.value='';
-
-        return;
-
-    }
-
-
-    let reader =
-        new FileReader();
-
-
-    reader.onload =
-    function(e){
-
-        try{
-
-            let wb =
-                XLSX.read(
-                    e.target.result,
-                    {
-                        type:'array',
-                        cellDates:true,
-                        raw:true
-                    }
-                );
-
-
-            let monthYear =
-                parseMonthYear(
-                    file.name
-                )
-                ||
-                parseMonthYear(
-                    wb.Props &&
-                    wb.Props.Title
-                )
-                ||
-                {
-                    y:
-                        new Date()
-                        .getFullYear(),
-
-                    m:
-                        new Date()
-                        .getMonth()+1
-                };
-
-
-            let importedSheets=0;
-
-            let importedRows=0;
-
-            let importedKM=0;
-
-            let createdBus=0;
-
-            let skippedSheets=0;
-
-            let report=[];
-
-
-            wb.SheetNames
-            .forEach(
-                sheetName=>{
-
-                    let cleanName =
-                        String(
-                            sheetName
-                        ).trim();
-
-
-                    /*
-                       Skip master sheets.
-                    */
-
-                    let skipName =
-                        cleanName
-                        .toUpperCase();
-
-
-                    if(
-                        skipName==='HOME' ||
-                        skipName==='BUS MASTER' ||
-                        skipName==='SUMMARY' ||
-                        skipName==='SERVICE SUMMARY'
-                    ){
-
-                        return;
-
-                    }
-
-
-                    let ws =
-                        wb.Sheets[
-                            sheetName
-                        ];
-
-
-                    let matrix =
-                        XLSX.utils
-                        .sheet_to_json(
-                            ws,
-                            {
-                                header:1,
-                                defval:'',
-                                raw:true
-                            }
-                        );
-
-
-                    if(
-                        !matrix.length
-                    ){
-
-                        skippedSheets++;
-
-                        return;
-
-                    }
-
-
-                    /*
-                       Find DATE / DAILY KM
-                    */
-
-                    let header =
-                        findHeader(
-                            matrix
-                        );
-
-
-                    if(
-                        header<0
-                    ){
-
-                        skippedSheets++;
-
-                        return;
-
-                    }
-
-
-                    /*
-                       Sheet = Bus No.
-                    */
-
-                    let busNo =
-                        sheetBusNo(
-                            cleanName
-                        );
-
-
-                    if(!busNo){
-
-                        skippedSheets++;
-
-                        return;
-
-                    }
-
-
-                    /*
-                       Find / Create Bus
-                    */
-
-                    let b =
-                        db.buses.find(
-                            x =>
-                            String(x.no)
-                            .trim()
-                            .toUpperCase()
-                            ===
-                            busNo
-                            .toUpperCase()
-                        );
-
-
-                    if(!b){
-
-                        if(
-                            db.buses.length
-                            >=MAX_BUS
-                        ){
-
-                            skippedSheets++;
-
-                            return;
-
-                        }
-
-
-                        b={
-
-                            no:busNo,
-
-                            make:''
-
-                        };
-
-
-                        db.buses.push(
-                            b
-                        );
-
-
-                        createdBus++;
-
-                    }
-
-
-                    /*
-                       Make
-                    */
-
-                    let make =
-                        sheetMake(
-                            matrix
-                        );
-
-
-                    if(make)
-                        b.make=make;
-
-
-                    ensureBus(b);
-
-
-                    /*
-                       Header columns
-                    */
-
-                    let h =
-                        (
-                            matrix[header]||[]
-                        )
-                        .map(
-                            normalizeHeader
-                        );
-
-
-                    let dateCol =
-                        findCol(
-                            h,
-                            [
-                                'DATE'
-                            ]
-                        );
-
-
-                    let dailyCol =
-                        findCol(
-                            h,
-                            [
-                                'DAILY KM',
-                                'DAILYKM',
-                                'DEALY KM',
-                                'DEALYKM'
-                            ]
-                        );
-
-
-                    if(
-                        dateCol<0 ||
-                        dailyCol<0
-                    ){
-
-                        skippedSheets++;
-
-                        return;
-
-                    }
-
-
-                    /*
-                       Opening row
-                    */
-
-                    let openingRow =
-                        findOpeningRow(
-                            matrix,
-                            header
-                        );
-
-
-                    /*
-                       Opening Date:
-                       default month first day
-                    */
-
-                    let openingDate =
-                        monthYear.y+
-                        '-'+
-                        pad(monthYear.m)+
-                        '-01';
-
-
-                    /*
-                       If opening row has a
-                       real date in DATE column,
-                       use it.
-                    */
-
-                    if(
-                        openingRow>=0
-                    ){
-
-                        let od =
-                            parseExcelDate(
-                                matrix[
-                                    openingRow
-                                ][dateCol],
-                                monthYear.y,
-                                monthYear.m
-                            );
-
-
-                        if(od){
-
-                            openingDate =
-                                od.y+
-                                '-'+
-                                pad(od.m)+
-                                '-'+
-                                pad(od.d);
-
-                        }
-
-                    }
-
-
-                    /*
-                       Save Base Date
-                    */
-
-                    db.baseDates[
-                        b.no
-                    ] =
-                        openingDate;
-
-
-                    /*
-                       Opening Program KM
-                    */
-
-                    if(
-                        openingRow>=0
-                    ){
-
-                        for(
-                            let j=0;
-                            j<h.length;
-                            j++
-                        ){
-
-                            let p =
-                                programFromHeader(
-                                    h[j]
-                                );
-
-
-                            if(
-                                p
-                            ){
-
-                                let v =
-                                    toNumber(
-                                        matrix[
-                                            openingRow
-                                        ][j]
-                                    );
-
-
-                                /*
-                                   Keep zero too if
-                                   column exists.
-                                */
-
-                                db.bases[
-                                    b.no
-                                ][p] = v;
-
-                            }
-
-                        }
-
-                    }
-
-
-                    /*
-                       Daily rows.
-
-                       Start at openingRow+1
-                       when Opening exists.
-                    */
-
-                    let startRow =
-                        openingRow>=0
-                        ?
-                        openingRow+1
-                        :
-                        header+1;
-
-
-                    /*
-                       Find all Program
-                       value columns.
-                    */
-
-                    let programCols=[];
-
-
-                    for(
-                        let j=0;
-                        j<h.length;
-                        j++
-                    ){
-
-                        let p =
-                            programFromHeader(
-                                h[j]
-                            );
-
-
-                        if(p){
-
-                            programCols.push({
-
-                                col:j,
-
-                                program:p
-
-                            });
-
-                        }
-
-                    }
-
-
-                    let added=0;
-
-
-                    for(
-                        let r=startRow;
-                        r<matrix.length;
-                        r++
-                    ){
-
-                        let row =
-                            matrix[r]||[];
-
-
-                        /*
-                           Date
-                        */
-
-                        let d =
-                            parseExcelDate(
-                                row[dateCol],
-                                monthYear.y,
-                                monthYear.m
-                            );
-
-
-                        if(!d)
-                            continue;
-
-
-                        if(
-                            d.d<1 ||
-                            d.d>31
-                        )
-                            continue;
-
-
-                        let date =
-                            d.y+
-                            '-'+
-                            pad(d.m)+
-                            '-'+
-                            pad(d.d);
-
-
-                        /*
-                           Daily KM
-                        */
-
-                        let daily =
-                            toNumber(
-                                row[dailyCol]
-                            );
-
-
-                        /*
-                           Docking daily,
-                           if column exists
-                        */
-
-                        let dockingCol =
-                            findCol(
-                                h,
-                                [
-                                    'DOCKING',
-                                    'DOCKING DAILY KM',
-                                    'DOCKING KM'
-                                ]
-                            );
-
-
-                        /*
-                           Be careful:
-                           If DOCKING KM is
-                           Program value column,
-                           don't treat it as
-                           Daily docking unless
-                           row has value.
-                        */
-
-                        let docking =
-                            dockingCol>=0
-                            ?
-                            toNumber(
-                                row[
-                                    dockingCol
-                                ]
-                            )
-                            :
-                            0;
-
-
-                        /*
-                           Save Date Entry
-                        */
-
-                        let old =
-                            db.entries.find(
-                                x=>
-                                x.bus===b.no &&
-                                x.date===date
-                            );
-
-
-                        if(old){
-
-                            old.daily=
-                                daily;
-
-                            old.docking=
-                                docking;
-
-                        }
-                        else{
-
-                            db.entries.push({
-
-                                bus:b.no,
-
-                                date:date,
-
-                                daily:daily,
-
-                                docking:docking
-
-                            });
-
-                        }
-
-
-                        /*
-                           If Excel contains
-                           date-wise Program KM,
-                           store exact values.
-                        */
-
-                        programCols
-                        .forEach(
-                            pc=>{
-
-                                /*
-                                   Avoid treating
-                                   DAILY KM as program.
-                                */
-
-                                let v =
-                                    toNumber(
-                                        row[pc.col]
-                                    );
-
-
-                                /*
-                                   Only save if
-                                   actual numeric
-                                   cell exists.
-                                */
-
-                                if(
-                                    row[pc.col] !== '' &&
-                                    row[pc.col] !== null &&
-                                    row[pc.col] !== undefined
-                                ){
-
-                                    setProgramValue(
-                                        b.no,
-                                        date,
-                                        pc.program,
-                                        v
-                                    );
-
-                                }
-
-                            }
-                        );
-
-
-                        importedRows++;
-
-                        importedKM += daily;
-
-                        added++;
-
-                    }
-
-
-                    if(added){
-
-                        importedSheets++;
-
-
-                        report.push(
-                            b.no+
-                            ' = '+
-                            added+
-                            ' days'
-                        );
-
-                    }
-
-                }
-            );
-
-
-            /*
-               Sort
-            */
-
-            db.entries.sort(
-                (a,b)=>
-                a.date.localeCompare(
-                    b.date
-                )
-            );
-
-
-            ensureBuses();
-
-            save();
-
-            refresh();
-
-
-            alert(
-
-                '✅ EXCEL IMPORT COMPLETE\n\n'+
-
-                'BUS SHEETS: '+
-                importedSheets+
-
-                '\nDATE ROWS: '+
-                importedRows+
-
-                '\nDAILY KM: '+
-                importedKM
-                .toLocaleString(
-                    'en-IN'
-                )+
-
-                '\nNEW BUS: '+
-                createdBus+
-
-                '\nSKIPPED: '+
-                skippedSheets+
-
-                '\n\n'+
-                report
-                .slice(
-                    0,
-                    35
-                )
-                .join('\n')
-                +
-                (
-                    report.length>35
-                    ?
-                    '\n...'
-                    :
-                    ''
-                )
-
-            );
-
-        }
-        catch(err){
-
-            console.error(err);
-
-
-            alert(
-
-                '❌ EXCEL IMPORT ERROR\n\n'+
-
-                err.message
-
-            );
-
-        }
-
-
-        ev.target.value='';
-
-    };
-
-
-    reader.readAsArrayBuffer(file);
-
-}
-
-
-/* =========================================================
-   FIND COLUMN
-========================================================= */
-
-function findCol(
-    headers,
-    aliases
-){
-
-    for(
-        let a of aliases
-    ){
-
-        let x =
-            normalizeHeader(
-                a
-            );
-
-
-        let i =
-            headers.indexOf(
-                x
-            );
-
-
-        if(i>=0)
-            return i;
-
-    }
-
-
-    return -1;
 
 }
 
@@ -5835,25 +4446,16 @@ function exportExcel(){
     }
 
 
-    let wb =
+    let wb=
         XLSX.utils.book_new();
 
-
-    /*
-       Bus sheets
-    */
 
     db.buses.forEach(
         b=>{
 
-            let rows =
-                db.entries
-                .filter(
-                    x=>x.bus===b.no
-                )
-                .sort(
-                    (a,z)=>
-                    a.date.localeCompare(z.date)
+            let rows=
+                entriesForBus(
+                    b.no
                 );
 
 
@@ -5861,16 +4463,35 @@ function exportExcel(){
 
                 [
 
-                    'BUS NO.',
+                    'VEH. NO.',
+
+                    '',
 
                     b.no,
 
                     'MAKE',
 
+                    '',
+
+                    '',
+
+                    '',
+
+                    '',
+
+                    '',
+
+                    '',
+
+                    '',
+
+                    '',
+
+                    '',
+
                     b.make
 
                 ],
-
 
                 [
 
@@ -5880,9 +4501,25 @@ function exportExcel(){
 
                     'MONTHLY KM',
 
-                    ...PROGRAMS,
+                    ...PROGRAMS
 
-                    'PROGRESSIVE KM'
+                ],
+
+                [
+
+                    '',
+
+                    '',
+
+                    '',
+
+                    ...PROGRAMS.map(
+                        p=>
+                        baseFor(
+                            b.no,
+                            p
+                        )
+                    )
 
                 ]
 
@@ -5894,13 +4531,13 @@ function exportExcel(){
 
                     data.push([
 
-                        fmtDate(
-                            x.date
+                        Number(
+                            String(
+                                x.date
+                            ).split('-')[2]
                         ),
 
-                        num(
-                            x.daily
-                        ),
+                        num(x.daily),
 
                         monthly(
                             b.no,
@@ -5914,11 +4551,6 @@ function exportExcel(){
                                 p,
                                 x.date
                             )
-                        ),
-
-                        progressive(
-                            b.no,
-                            x.date
                         )
 
                     ]);
@@ -5927,14 +4559,12 @@ function exportExcel(){
             );
 
 
-            let ws =
+            let ws=
                 XLSX.utils
-                .aoa_to_sheet(
-                    data
-                );
+                .aoa_to_sheet(data);
 
 
-            let sheetName =
+            let sheetName=
                 String(
                     b.no
                 )
@@ -5948,19 +4578,24 @@ function exportExcel(){
                 );
 
 
-            XLSX.utils
-            .book_append_sheet(
-                wb,
-                ws,
-                sheetName
-            );
+            try{
+
+                XLSX.utils
+                .book_append_sheet(
+                    wb,
+                    ws,
+                    sheetName
+                );
+
+            }
+            catch(e){}
 
         }
     );
 
 
     /*
-       Bus Master
+       BUS MASTER
     */
 
     let master=[
@@ -5986,31 +4621,26 @@ function exportExcel(){
     .book_append_sheet(
         wb,
         XLSX.utils
-        .aoa_to_sheet(master),
+        .aoa_to_sheet(
+            master
+        ),
         'BUS MASTER'
     );
 
 
     /*
-       Service
+       SERVICE
     */
 
     let svc=[
 
         [
-
             'BUS NO.',
-
             'PROGRAM',
-
             'INTERVAL KM',
-
             'SERVICE DATE',
-
             'SERVICE KM',
-
-            'NEXT SERVICE KM'
-
+            'NEXT DUE KM'
         ]
 
     ];
@@ -6019,9 +4649,9 @@ function exportExcel(){
     db.services.forEach(
         s=>{
 
-            let cfg =
+            let cfg=
                 db.programConfig[
-                    key(
+                    configKey(
                         s.bus,
                         s.program
                     )
@@ -6030,13 +4660,13 @@ function exportExcel(){
                 {};
 
 
-            let interval =
+            let interval=
                 num(
                     cfg.interval
                 );
 
 
-            let next =
+            let next=
                 interval
                 ?
                 num(s.km)+interval
@@ -6068,61 +4698,36 @@ function exportExcel(){
     .book_append_sheet(
         wb,
         XLSX.utils
-        .aoa_to_sheet(svc),
+        .aoa_to_sheet(
+            svc
+        ),
         'SERVICE SUMMARY'
-    );
-
-
-    /*
-       Program Base
-    */
-
-    let bases=[
-
-        [
-            'BUS NO.',
-            'BASE DATE',
-            ...PROGRAMS
-        ]
-
-    ];
-
-
-    db.buses.forEach(
-        b=>{
-
-            bases.push([
-
-                b.no,
-
-                db.baseDates[b.no] || '',
-
-                ...PROGRAMS.map(
-                    p=>
-                    baseFor(
-                        b.no,
-                        p
-                    )
-                )
-
-            ]);
-
-        }
-    );
-
-
-    XLSX.utils
-    .book_append_sheet(
-        wb,
-        XLSX.utils
-        .aoa_to_sheet(bases),
-        'PROGRAM BASE'
     );
 
 
     XLSX.writeFile(
         wb,
-        'GSRTC_KM_REGISTER.xlsx'
+        'GSRTC_KM_Register.xlsx'
+    );
+
+}
+
+
+/* =========================================================
+   ENTRIES
+========================================================= */
+
+function entriesForBus(
+    bus
+){
+
+    return db.entries
+    .filter(
+        x=>x.bus===bus
+    )
+    .sort(
+        (a,b)=>
+        a.date.localeCompare(b.date)
     );
 
 }
@@ -6134,38 +4739,23 @@ function exportExcel(){
 
 function clearAllData(){
 
-    let first =
+    let x=
         prompt(
-            'બધો data clear કરવા માટે CLEAR લખો:'
+            'બધો Data clear કરવા માટે CLEAR લખો:'
         );
 
 
     if(
-        first !== 'CLEAR'
+        x!=='CLEAR'
     ){
 
         alert(
-            'Data clear કરવામાં આવ્યો નથી.'
+            'Data clear થયો નથી.'
         );
 
         return;
 
     }
-
-
-    let second =
-        confirm(
-            'Final confirmation: બધા Bus, KM, Program Base, Service અને Maintenance data delete કરવા છે?'
-        );
-
-
-    if(!second)
-        return;
-
-
-    localStorage.removeItem(
-        DBKEY
-    );
 
 
     db={
@@ -6178,13 +4768,16 @@ function clearAllData(){
 
         baseDates:{},
 
-        programValues:{},
-
         programConfig:{},
 
         services:[]
 
     };
+
+
+    localStorage.removeItem(
+        DBKEY
+    );
 
 
     save();
@@ -6193,7 +4786,7 @@ function clearAllData(){
 
 
     alert(
-        '✅ ALL DATA CLEAR થયું.\n\nહવે Excel Import કરી શકો છો.'
+        '✅ બધા data clear થયા.\n\nહવે Excel Import કરો.'
     );
 
 }
