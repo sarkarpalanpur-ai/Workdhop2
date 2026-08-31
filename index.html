@@ -33,7 +33,7 @@ label{font-weight:700;font-size:13px}input,select{width:100%;padding:10px;border
 <button onclick="showPage('import',this)">Excel Import</button>
 <button onclick="showPage('daily',this)">Date Wise KM</button>
 <button onclick="showPage('maintenance',this)">Maintenance</button>
-<button onclick="showPage('summary',this)">Date Wise Summary</button>
+<button onclick="showPage('summary',this)">Date Wise Summary</button><button onclick="showPage('programSummary',this)">Program Summary</button>
 <button onclick="showPage('bus',this)">Bus Master</button>
 </nav>
 </header>
@@ -97,10 +97,10 @@ Opening rowમાંથી Maintenanceના સાચા KM લેવાશે 
 <div class="grid">
 <div><label>Bus No.</label><select id="mBus" onchange="renderMaintenance()"></select></div>
 <div><label>From Date</label><input type="date" id="mFrom" onchange="renderMaintenance()"></div>
-<div><label>To Date</label><input type="date" id="mTo" onchange="renderMaintenance()"></div>
+<div><label>To Date</label><input type="date" id="mTo" onchange="renderMaintenance()"></div><div><label>Service Program</label><select id="mProgram"></select></div>
 </div>
 <div class="actions">
-<button class="btn green" onclick="markService()">Selected Date પર Service Done</button>
+<button class="btn green" onclick="markService()">Selected Program Service Done → KM 0</button>
 <button class="btn" onclick="window.print()">PRINT MAINTENANCE</button>
 </div>
 </div>
@@ -124,6 +124,19 @@ Opening rowમાંથી Maintenanceના સાચા KM લેવાશે 
 <h2 id="summaryTitle">01-08-26 થી 01-09-26</h2>
 <div class="tablewrap"><table id="summaryTable"></table></div>
 </div>
+</section>
+
+<section id="programSummary" class="page">
+<div class="card no-print">
+<h2>Maintenance Program Summary</h2>
+<div class="grid">
+<div><label>From Date</label><input type="date" id="pFrom" onchange="renderProgramSummary()"></div>
+<div><label>To Date</label><input type="date" id="pTo" onchange="renderProgramSummary()"></div>
+<div><label>Bus Filter</label><select id="pBus" onchange="renderProgramSummary()"><option value="">ALL BUS</option></select></div>
+</div>
+<div class="actions"><button class="btn" onclick="window.print()">PRINT PROGRAM SUMMARY</button></div>
+</div>
+<div class="card"><div class="tablewrap"><table id="programSummaryTable"></table></div></div>
 </section>
 
 <section id="bus" class="page">
@@ -154,7 +167,7 @@ function dateKey(y,m,d){return `${y}-${pad(m)}-${pad(d)}`}
 function showPage(id,btn){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('nav button').forEach(x=>x.classList.remove('active'));if(btn)btn.classList.add('active');if(id==='maintenance')renderMaintenance();if(id==='summary')renderSummary()}
 function allBuses(){return Object.keys(db.buses).sort((a,b)=>a.localeCompare(b,undefined,{numeric:true}))}
 function refreshSelect(id,all=false){let s=document.getElementById(id);if(!s)return;let old=s.value;s.innerHTML=all?'<option value="">ALL BUS</option>':'';allBuses().forEach(b=>{let o=document.createElement('option');o.value=b;o.textContent=b;s.appendChild(o)});if([...s.options].some(o=>o.value===old))s.value=old}
-function refreshAll(){['dBus','mBus','sBus'].forEach(id=>refreshSelect(id,id==='sBus'));renderDashboard();renderDaily();renderBus();renderMaintenance();renderSummary()}
+function refreshAll(){['dBus','mBus','sBus','pBus'].forEach(id=>refreshSelect(id,id==='sBus'||id==='pBus'));let mp=document.getElementById('mProgram');if(mp){let old=mp.value;mp.innerHTML=PROGRAMS.map(p=>`<option value="${p[0]}">${p[0]}</option>`).join('');if([...mp.options].some(o=>o.value===old))mp.value=old;}renderDashboard();renderDaily();renderBus();renderMaintenance();renderSummary()}
 function addBus(){let b=norm(document.getElementById('newBus').value),m=norm(document.getElementById('newMake').value);if(!b)return alert('Bus No. નાખો');db.buses[b]={make:m};if(!db.maintenance[b])db.maintenance[b]={};saveDB();document.getElementById('newBus').value='';document.getElementById('newMake').value=''}
 function clearAll(){if(confirm('બધો data delete કરવો છે?')){localStorage.removeItem(KEY);location.reload()}}
 function renderDashboard(){document.getElementById('stBus').textContent=allBuses().length;let rows=Object.values(db.entries);document.getElementById('stRows').textContent=rows.length;document.getElementById('stKm').textContent=rows.reduce((a,x)=>a+num(x.daily),0).toLocaleString('en-IN');document.getElementById('stProg').textContent=PROGRAMS.length;document.getElementById('dashInfo').textContent=allBuses().length?`Imported/entered ${allBuses().length} buses. Maintenance હવે Bus પસંદ કરીને date-wise જોઈ શકો.`:'Excel Import કરો.'}
@@ -163,8 +176,9 @@ function renderDaily(){let t=document.getElementById('dailyTable');let rows=Obje
 function setDefaultDates(){if(!document.getElementById('mFrom').value){document.getElementById('mFrom').value='2026-08-01';document.getElementById('mTo').value='2026-09-01';document.getElementById('sFrom').value='2026-08-01';document.getElementById('sTo').value='2026-09-01'}}
 function maintenanceFor(b){return db.maintenance[b]||{}}
 function renderMaintenance(){setDefaultDates();let b=mBus.value;let t=document.getElementById('maintenanceTable');if(!b){t.innerHTML='<tr><td>Bus પસંદ કરો</td></tr>';return}let from=mFrom.value,to=mTo.value||from;let dates=[];for(let x=new Date(from+'T00:00:00');x<=new Date(to+'T00:00:00');x.setDate(x.getDate()+1))dates.push(x.toISOString().slice(0,10));let md=maintenanceFor(b);document.getElementById('maintenanceTitle').innerHTML='<h2>BUS '+b+' — Maintenance Date Wise KM</h2><div class="muted">Opening KM + દરેક તારીખે Excelમાં જે program KM છે તે જ અહીં બતાવવામાં આવશે.</div>';let head='<tr><th>Date</th>'+PROGRAMS.map(p=>`<th>${p[0]}</th>`).join('')+'</tr>';let body=dates.map(d=>{let r=md[d]||{};return `<tr><td class="sticky1">${fmtDate(d)}</td>`+PROGRAMS.map(p=>`<td>${r[p[0]]!==undefined?num(r[p[0]]).toLocaleString('en-IN'):''}</td>`).join('')+'</tr>'}).join('');t.innerHTML=head+body}
-function markService(){let b=mBus.value,d=mFrom.value;if(!b||!d)return;let md=db.maintenance[b]||(db.maintenance[b]={});let r=md[d]||(md[d]={});r._service=true;db.services[b+'|'+d]=true;saveDB();alert('Service Done save થયું.')}
-function renderSummary(){setDefaultDates();let from=sFrom.value,to=sTo.value;if(!from||!to)return;let filter=sBus.value;let buses=filter?[filter]:allBuses();document.getElementById('summaryTitle').textContent=fmtDate(from)+' થી '+fmtDate(to)+' — Date Wise Summary';let dates=[];for(let x=new Date(from+'T00:00:00');x<=new Date(to+'T00:00:00');x.setDate(x.getDate()+1))dates.push(x.toISOString().slice(0,10));let head='<tr><th class="sticky1">Date</th>'+buses.map(b=>`<th>${b}</th>`).join('')+'<th>TOTAL KM</th></tr>';let body=dates.map(d=>{let total=0;let cells=buses.map(b=>{let r=db.entries[b+'|'+d];let v=r?num(r.daily):0;total+=v;return `<td>${v?v.toLocaleString('en-IN'):''}</td>`}).join('');return `<tr><td class="sticky1">${fmtDate(d)}</td>${cells}<td><b>${total?total.toLocaleString('en-IN'):''}</b></td></tr>`}).join('');document.getElementById('summaryTable').innerHTML=head+body}
+function markService(){let b=mBus.value,d=mFrom.value,p=mProgram.value;if(!b||!d||!p)return;let md=db.maintenance[b]||(db.maintenance[b]={});let r=md[d]||(md[d]={});r[p]=0;r._servicePrograms=r._servicePrograms||[];if(!r._servicePrograms.includes(p))r._servicePrograms.push(p);db.services[b+'|'+d+'|'+p]=true;saveDB();alert(p+' Service Done — KM 0 save થયું.')}
+function renderSummary(){setDefaultDates();let from=sFrom.value,to=sTo.value;if(!from||!to)return;let filter=sBus.value;let buses=filter?[filter]:allBuses();document.getElementById('summaryTitle').textContent=fmtDate(from)+' થી '+fmtDate(to)+' — Date Wise Summary';let dates=[];for(let x=new Date(from+'T00:00:00');x<=new Date(to+'T00:00:00');x.setDate(x.getDate()+1))dates.push(x.toISOString().slice(0,10));let head='<tr><th>Date</th>'+buses.map(b=>`<th>${b} Daily KM</th>`).join('')+'<th>TOTAL DAILY KM</th><th>MONTHLY KM TOTAL</th><th>TOTAL PROGRESSIVE KM</th></tr>';let monthly=0;let body=dates.map(d=>{let total=0,prog=0;let cells=buses.map(b=>{let r=db.entries[b+'|'+d];let v=r?num(r.daily):0;let pr=r?num(r.prog):0;total+=v;if(pr>prog)prog=pr;return `<td>${v?v.toLocaleString('en-IN'):''}</td>`}).join('');monthly+=total;return `<tr><td>${fmtDate(d)}</td>${cells}<td><b>${total?total.toLocaleString('en-IN'):''}</b></td><td><b>${monthly?monthly.toLocaleString('en-IN'):''}</b></td><td><b>${prog?prog.toLocaleString('en-IN'):''}</b></td></tr>`}).join('');document.getElementById('summaryTable').innerHTML=head+body}
+function renderProgramSummary(){setDefaultDates();let from=pFrom.value,to=pTo.value;if(!from||!to)return;let filter=pBus.value,buses=filter?[filter]:allBuses();let totals={};PROGRAMS.forEach(p=>totals[p[0]]={daily:0,service:0,last:0});let dates=[];for(let x=new Date(from+'T00:00:00');x<=new Date(to+'T00:00:00');x.setDate(x.getDate()+1))dates.push(x.toISOString().slice(0,10));buses.forEach(b=>{let md=db.maintenance[b]||{};dates.forEach(d=>{let r=md[d]||{};PROGRAMS.forEach(p=>{if(r[p[0]]!==undefined){totals[p[0]].daily+=num(r[p[0]]);totals[p[0]].last=num(r[p[0]]);}if(r._servicePrograms&&r._servicePrograms.includes(p[0]))totals[p[0]].service++})})});let h='<tr><th>Program</th><th>Date Wise KM Total</th><th>Service Done</th><th>Current/Last KM</th></tr>';let b=PROGRAMS.map(p=>`<tr><td><b>${p[0]}</b></td><td>${totals[p[0]].daily.toLocaleString('en-IN')}</td><td>${totals[p[0]].service}</td><td>${totals[p[0]].last.toLocaleString('en-IN')}</td></tr>`).join('');document.getElementById('programSummaryTable').innerHTML=h+b}
 function renderBus(){let t=document.getElementById('busTable');t.innerHTML='<tr><th>Bus No.</th><th>Make</th><th>Action</th></tr>'+allBuses().map(b=>`<tr><td>${b}</td><td>${db.buses[b].make||''}</td><td><button class="btn danger" onclick="deleteBus('${b.replace(/'/g,"\\'")}')">DELETE</button></td></tr>`).join('')}
 function deleteBus(b){if(confirm('Delete '+b+'?')){delete db.buses[b];delete db.maintenance[b];Object.keys(db.entries).filter(k=>k.startsWith(b+'|')).forEach(k=>delete db.entries[k]);saveDB()}}
 function importExcel(){
