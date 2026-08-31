@@ -1,2045 +1,226 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="gu">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>07-KM Register</title>
-
-<!-- Excel Library -->
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GSRTC KM Register</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-
 <style>
-*{box-sizing:border-box}
-
-body{
-    margin:0;
-    background:#edf2f6;
-    font-family:Arial,Helvetica,sans-serif;
-    color:#111;
-}
-
-.app{
-    margin:5px;
-    border:2px solid #222;
-    background:#fff;
-}
-
-.header{
-    background:#eef5fb;
-    border-bottom:1px solid #888;
-}
-
-.title{
-    height:50px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    position:relative;
-    border-bottom:1px solid #aaa;
-}
-
-.title h1{
-    margin:0;
-    font-size:25px;
-}
-
-.buttons{
-    position:absolute;
-    right:8px;
-    top:8px;
-    display:flex;
-    gap:7px;
-}
-
-button{
-    border:0;
-    border-radius:4px;
-    padding:9px 14px;
-    font-weight:bold;
-    cursor:pointer;
-}
-
-.green{background:#157a35;color:white}
-.blue{background:#14559e;color:white}
-.red{background:#d5222a;color:white}
-.yellow{background:#f0c400;color:#111}
-
-.info{
-    display:flex;
-    gap:30px;
-    align-items:center;
-    padding:10px;
-    flex-wrap:wrap;
-}
-
-.field{
-    display:flex;
-    align-items:center;
-}
-
-.field label{
-    min-width:90px;
-    text-align:center;
-    font-weight:bold;
-    border-bottom:1px solid #555;
-    padding:5px;
-}
-
-.field input,
-.field select{
-    height:34px;
-    border:1px solid #aaa;
-    padding:5px 9px;
-    font-weight:bold;
-    font-size:15px;
-}
-
-#vehNo{
-    width:200px;
-    color:#b51d28;
-    text-align:center;
-    font-size:20px;
-}
-
-#make{
-    width:155px;
-    text-align:center;
-}
-
-#month{
-    width:165px;
-}
-
-.tableBox{
-    overflow:auto;
-    max-height:calc(100vh - 230px);
-}
-
-table{
-    border-collapse:collapse;
-    width:max-content;
-    min-width:100%;
-    font-size:13px;
-}
-
-th,td{
-    border:1px solid #aaa;
-    text-align:center;
-    padding:3px 5px;
-    white-space:nowrap;
-}
-
-thead tr:first-child th{
-    height:72px;
-    background:#edf3f8;
-    font-size:12px;
-}
-
-thead tr:last-child th{
-    background:#fff3cf;
-    height:28px;
-}
-
-tbody td{
-    height:25px;
-}
-
-tbody tr:nth-child(even){
-    background:#fafafa;
-}
-
-.edit{
-    min-width:90px;
-    background:white;
-    outline:none;
-}
-
-.edit:focus{
-    box-shadow:inset 0 0 0 2px #2476bd;
-}
-
-.warn{
-    background:#ffe69a !important;
-}
-
-.due{
-    background:#ffb2b2 !important;
-}
-
-.zero{
-    background:#d7f0d7 !important;
-}
-
-.total{
-    background:#e5edf5 !important;
-    font-weight:bold;
-    font-size:14px;
-}
-
-.total td{
-    height:32px;
-}
-
-.footer{
-    display:grid;
-    grid-template-columns:1.3fr 1fr 1fr;
-    gap:25px;
-    padding:14px 30px 18px;
-    border-top:1px solid #888;
-    background:#fafafa;
-}
-
-.serviceTitle{
-    font-weight:bold;
-    margin-bottom:12px;
-}
-
-.serviceControls{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    flex-wrap:wrap;
-}
-
-.serviceControls select{
-    height:34px;
-    width:245px;
-}
-
-.note{
-    font-size:13px;
-    line-height:1.7;
-}
-
-.note b{
-    color:#b51d28;
-}
-
-.today{
-    text-align:right;
-    color:#c21f2c;
-    font-weight:bold;
-}
-
-/* SUMMARY */
-
-#summaryModal{
-    display:none;
-    position:fixed;
-    inset:0;
-    background:rgba(0,0,0,.5);
-    z-index:9999;
-    align-items:center;
-    justify-content:center;
-}
-
-.summaryBox{
-    width:min(720px,95vw);
-    background:white;
-    border-radius:8px;
-    padding:20px;
-    box-shadow:0 5px 25px #333;
-}
-
-.summaryHeader{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    border-bottom:1px solid #aaa;
-    padding-bottom:10px;
-}
-
-.summaryHeader h2{
-    margin:0;
-}
-
-.summaryFilters{
-    display:flex;
-    gap:15px;
-    flex-wrap:wrap;
-    align-items:end;
-    margin:20px 0;
-}
-
-.summaryFilters label{
-    display:block;
-    font-weight:bold;
-    margin-bottom:5px;
-}
-
-.summaryFilters input{
-    height:36px;
-    padding:5px;
-    border:1px solid #aaa;
-}
-
-.summaryRange{
-    text-align:center;
-    color:#b51d28;
-    font-weight:bold;
-    margin:10px;
-}
-
-.summaryCards{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:12px;
-}
-
-.card{
-    border:1px solid #aaa;
-    background:#f2f6fa;
-    padding:18px;
-    text-align:center;
-    border-radius:6px;
-}
-
-.card b{
-    display:block;
-    font-size:12px;
-    margin-bottom:10px;
-}
-
-.card span{
-    font-size:25px;
-    font-weight:bold;
-}
-
-@media(max-width:900px){
-
-    .title{
-        height:auto;
-        padding:10px 5px 60px;
-    }
-
-    .title h1{
-        font-size:19px;
-    }
-
-    .buttons{
-        left:5px;
-        right:5px;
-        top:auto;
-        bottom:8px;
-        justify-content:center;
-        flex-wrap:wrap;
-    }
-
-    .footer{
-        grid-template-columns:1fr;
-    }
-
-    .today{
-        text-align:left;
-    }
-}
-
-@media(max-width:600px){
-
-    .summaryCards{
-        grid-template-columns:1fr;
-    }
-}
+:root{--bg:#f4f7fb;--card:#fff;--primary:#0759a5;--dark:#12344d;--line:#d7e0ea;--ok:#168447;--warn:#d97900}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,Noto Sans Gujarati,sans-serif;background:var(--bg);color:#182531}
+header{background:linear-gradient(135deg,#064f91,#0a78c8);color:#fff;padding:18px 22px;position:sticky;top:0;z-index:20;box-shadow:0 2px 8px #0002}
+header h1{margin:0;font-size:25px}header small{opacity:.9}
+nav{display:flex;gap:7px;flex-wrap:wrap;margin-top:13px}
+nav button,.btn{border:0;border-radius:8px;padding:10px 14px;font-weight:700;cursor:pointer;background:#eaf3fb;color:#12344d}
+nav button.active,.btn.primary{background:#ffcf33;color:#13283b}
+main{padding:18px;max-width:1600px;margin:auto}.page{display:none}.page.active{display:block}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:16px;box-shadow:0 2px 7px #0000000a}
+h2{margin:0 0 13px;color:var(--dark);font-size:20px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}
+label{font-weight:700;font-size:13px}input,select{width:100%;padding:10px;border:1px solid #b9c8d6;border-radius:7px;background:#fff;font-size:15px}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.btn{background:#e9eef4}.btn.danger{background:#ffe3e3;color:#9b1c1c}.btn.green{background:#dff6e8;color:#116536}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px}.stat{background:#fff;border:1px solid var(--line);border-radius:12px;padding:15px}.stat b{display:block;font-size:26px;color:var(--primary);margin-top:4px}
+.tablewrap{overflow:auto;border:1px solid var(--line);border-radius:9px;background:#fff}table{border-collapse:collapse;width:100%;min-width:850px}th,td{border-bottom:1px solid #e1e7ee;border-right:1px solid #e8edf2;padding:8px 9px;text-align:center;white-space:nowrap;font-size:13px}th{background:#eaf3fb;color:#173a54;position:sticky;top:0;z-index:3}tr:hover td{background:#f8fbff}.sticky1{position:sticky;left:0;z-index:4;background:#fff}.sticky2{position:sticky;left:55px;z-index:4;background:#fff}
+.notice{background:#fff8dc;border:1px solid #efd47b;padding:11px;border-radius:8px;margin-bottom:12px}.muted{color:#607282}.right{text-align:right}.dangerText{color:#b3261e;font-weight:700}.okText{color:#13753e;font-weight:700}
+@media print{header,nav,.no-print{display:none!important}main{padding:0}.card{box-shadow:none;border:0}.page{display:none}.page.printable{display:block}}
 </style>
 </head>
-
 <body>
+<header>
+<h1>GSRTC KM Register & Maintenance</h1>
+<small>Excel આધારિત Bus-wise • Date-wise • Maintenance KM Register</small>
+<nav>
+<button class="active" onclick="showPage('dashboard',this)">Dashboard</button>
+<button onclick="showPage('import',this)">Excel Import</button>
+<button onclick="showPage('daily',this)">Date Wise KM</button>
+<button onclick="showPage('maintenance',this)">Maintenance</button>
+<button onclick="showPage('summary',this)">Date Wise Summary</button>
+<button onclick="showPage('bus',this)">Bus Master</button>
+</nav>
+</header>
 
-<div id="summaryModal">
-
-    <div class="summaryBox">
-
-        <div class="summaryHeader">
-            <h2>KM SUMMARY</h2>
-            <button class="red" onclick="closeSummary()">CLOSE</button>
-        </div>
-
-        <div class="summaryFilters">
-
-            <div>
-                <label>FROM DATE</label>
-                <input type="date" id="summaryFrom">
-            </div>
-
-            <div>
-                <label>TO DATE</label>
-                <input type="date" id="summaryTo">
-            </div>
-
-            <button class="green" onclick="calculateSummary()">
-                SHOW SUMMARY
-            </button>
-
-        </div>
-
-        <div class="summaryRange" id="summaryRange">
-            Date to Date
-        </div>
-
-        <div class="summaryCards">
-
-            <div class="card">
-                <b>DAILY KM TOTAL</b>
-                <span id="summaryDaily">0</span>
-            </div>
-
-            <div class="card">
-                <b>MONTHLY KM TOTAL</b>
-                <span id="summaryMonthly">0</span>
-            </div>
-
-            <div class="card">
-                <b>PROGRESSIVE KM TOTAL</b>
-                <span id="summaryProgressive">0</span>
-            </div>
-
-        </div>
-
-    </div>
-
+<main>
+<section id="dashboard" class="page active">
+<div class="stats">
+<div class="stat">Bus Count<b id="stBus">0</b></div>
+<div class="stat">KM Entries<b id="stRows">0</b></div>
+<div class="stat">Total Daily KM<b id="stKm">0</b></div>
+<div class="stat">Service Programs<b id="stProg">0</b></div>
 </div>
-
-
-<div class="app">
-
-<div class="header">
-
-    <div class="title">
-
-        <h1 id="title">
-            07-KM Register - AUGUST-2026
-        </h1>
-
-        <div class="buttons">
-
-            <button class="green"
-                    onclick="document.getElementById('excelFile').click()">
-                IMPORT EXCEL
-            </button>
-
-            <button class="blue"
-                    onclick="exportExcel()">
-                EXPORT EXCEL
-            </button>
-
-            <button class="red"
-                    onclick="resetAll()">
-                RESET ALL
-            </button>
-
-            <button class="yellow"
-                    onclick="openSummary()">
-                SUMMARY
-            </button>
-
-            <button class="yellow"
-                    id="serviceButton">
-                SERVICE DONE (0)
-            </button>
-
-            <input type="file"
-                   id="excelFile"
-                   accept=".xlsx,.xls,.csv"
-                   hidden
-                   onchange="importExcel(event)">
-
-        </div>
-
-    </div>
-
-
-    <div class="info">
-
-        <div class="field">
-            <label>VEH. NO.</label>
-            <input id="vehNo"
-                   value="9269"
-                   oninput="vehicleChanged()">
-        </div>
-
-        <div class="field">
-            <label>MAKE</label>
-            <input id="make"
-                   value="TATA LAYMAN"
-                   oninput="saveData()">
-        </div>
-
-        <div class="field">
-            <label>MONTH</label>
-            <select id="month"
-                    onchange="buildTable()">
-            </select>
-        </div>
-
-    </div>
-
+<div class="card" style="margin-top:16px">
+<h2>Current Data</h2>
+<div id="dashInfo" class="muted">Excel Import કરીને data શરૂ કરો.</div>
 </div>
+</section>
 
-
-<div class="tableBox">
-
-<table id="kmTable">
-
-<thead>
-
-<tr>
-
-<th></th>
-
-<th>DATE</th>
-
-<th>DAILY<br>KM</th>
-
-<th>MONTHLY<br>KM</th>
-
-<th>DOCKING<br>KM</th>
-
-<th>ENGINE<br>OIL<br>CHANGE<br>KM</th>
-
-<th>VEH.<br>PROG.<br>KM</th>
-
-<th>FUEL FILT<br>CUM<br>WATER<br>SEP</th>
-
-<th>UREA<br>FILTER</th>
-
-<th>PRL AIR<br>FILTER</th>
-
-<th>SEC. AIR<br>FILTER</th>
-
-<th>GEAR OIL<br>CHANGE</th>
-
-<th>DIFF. OIL<br>COARENT</th>
-
-<th>⚙</th>
-
-<th>POWER<br>ST. KM</th>
-
-<th>RADIATOR<br>COOLENT</th>
-
-<th>DAILY<br>DIESEL</th>
-
-</tr>
-
-<tr>
-
-<th></th>
-<th>1</th>
-<th>2</th>
-<th>3</th>
-<th>4</th>
-<th>5</th>
-<th>6</th>
-<th>7</th>
-<th>8</th>
-<th>10</th>
-<th>12</th>
-<th>13</th>
-<th>16</th>
-<th>14</th>
-<th>15</th>
-<th>18</th>
-<th>18</th>
-
-</tr>
-
-</thead>
-
-<tbody id="tableBody"></tbody>
-
-</table>
-
+<section id="import" class="page">
+<div class="card">
+<h2>Excel Import — તમારી મોકલેલી Excel જેવી structure</h2>
+<div class="notice">
+દરેક vehicle માટે અલગ Sheet હોય તો Sheet Name ને Bus No માનવામાં આવશે. <b>HOME</b> sheet import નહીં થાય.
+Opening rowમાંથી Maintenanceના સાચા KM લેવાશે અને 1,2,3... તારીખોની rowsમાંથી date-wise program KM લેવાશે.
 </div>
-
-
-<div class="footer">
-
-<div>
-
-<div class="serviceTitle">
-SERVICE DONE (<span id="serviceCount">0</span>)
+<input id="excelFile" type="file" accept=".xlsx,.xls">
+<div class="actions">
+<button class="btn primary" onclick="importExcel()">IMPORT EXCEL</button>
+<button class="btn" onclick="exportExcel()">EXPORT EXCEL</button>
+<button class="btn" onclick="window.print()">PRINT</button>
+<button class="btn danger" onclick="clearAll()">CLEAR ALL DATA</button>
 </div>
-
-<div class="serviceControls">
-
-<span>Select Column:</span>
-
-<select id="serviceColumn">
-<option value="">-- Select Column --</option>
-</select>
-
-<button class="green"
-        onclick="setZero()">
-SET 0 (ZERO)
-</button>
-
+<div id="importMsg" style="margin-top:12px"></div>
 </div>
-
+<div class="card">
+<h2>Detected format</h2>
+<div id="formatInfo" class="muted">Excel પસંદ કર્યા પછી અહીં sheet અને column mapping દેખાશે.</div>
 </div>
+</section>
 
-
-<div class="note">
-
-<b>Note:</b><br>
-
-1. SERVICE DONE (0) – Select column and click SET 0 (ZERO).<br>
-
-2. All KM values are cumulative.<br>
-
-3. Yellow = service near.<br>
-
-4. Red = service due.
-
+<section id="daily" class="page">
+<div class="card">
+<h2>Date Wise KM Entry</h2>
+<div class="grid">
+<div><label>Date</label><input type="date" id="dDate"></div>
+<div><label>Bus No.</label><select id="dBus"></select></div>
+<div><label>Daily KM</label><input type="number" id="dKm" min="0"></div>
+<div><label>Progressive KM</label><input type="number" id="dProg" min="0"></div>
+<div><label>Driver</label><input id="dDriver"></div>
 </div>
-
-
-<div class="today"
-     id="today">
-Today :
+<div class="actions"><button class="btn primary" onclick="saveDaily()">SAVE / UPDATE</button></div>
 </div>
-
+<div class="card">
+<h2>Daily Records</h2><div class="tablewrap"><table id="dailyTable"></table></div>
 </div>
+</section>
 
+<section id="maintenance" class="page">
+<div class="card no-print">
+<h2>Maintenance — Excel મુજબ Date Wise KM</h2>
+<div class="grid">
+<div><label>Bus No.</label><select id="mBus" onchange="renderMaintenance()"></select></div>
+<div><label>From Date</label><input type="date" id="mFrom" onchange="renderMaintenance()"></div>
+<div><label>To Date</label><input type="date" id="mTo" onchange="renderMaintenance()"></div>
 </div>
+<div class="actions">
+<button class="btn green" onclick="markService()">Selected Date પર Service Done</button>
+<button class="btn" onclick="window.print()">PRINT MAINTENANCE</button>
+</div>
+</div>
+<div class="card">
+<div id="maintenanceTitle"></div>
+<div class="tablewrap"><table id="maintenanceTable"></table></div>
+</div>
+</section>
 
+<section id="summary" class="page">
+<div class="card no-print">
+<h2>Date Wise Summary</h2>
+<div class="grid">
+<div><label>From Date</label><input type="date" id="sFrom" onchange="renderSummary()"></div>
+<div><label>To Date</label><input type="date" id="sTo" onchange="renderSummary()"></div>
+<div><label>Bus Filter</label><select id="sBus" onchange="renderSummary()"><option value="">ALL BUS</option></select></div>
+</div>
+<div class="actions"><button class="btn" onclick="window.print()">PRINT DATE WISE SUMMARY</button></div>
+</div>
+<div class="card">
+<h2 id="summaryTitle">01-08-26 થી 01-09-26</h2>
+<div class="tablewrap"><table id="summaryTable"></table></div>
+</div>
+</section>
+
+<section id="bus" class="page">
+<div class="card">
+<h2>Bus Master</h2>
+<div class="grid"><div><label>Bus No.</label><input id="newBus"></div><div><label>Make</label><input id="newMake"></div></div>
+<div class="actions"><button class="btn primary" onclick="addBus()">ADD BUS</button></div>
+</div>
+<div class="card"><div class="tablewrap"><table id="busTable"></table></div></div>
+</section>
+</main>
 
 <script>
-
-/* =========================
-   MAINTENANCE PROGRAM
-========================= */
-
-const maintenance = [
-
-["Docking KM","docking",450],
-
-["Engine Oil Change KM","engine",3500],
-
-["Veh. Prog. KM","vehprog",492018],
-
-["Fuel Filt Cum Water Sep","fuel",84063],
-
-["Urea Filter","urea",30103],
-
-["PRL Air Filter","prl",16312],
-
-["Sec. Air Filter","sec",157001],
-
-["Gear Oil Change","gear",86319],
-
-["Diff. Oil Coarent","diff",157001],
-
-["⚙","gear2",0],
-
-["Power St. KM","power",157001],
-
-["Radiator Coolent","rad",188865],
-
-["Daily Diesel","diesel",0]
-
+const PROGRAMS=[
+["DOCKING KM",40000],["ENGINE OIL CHANGE KM",40000],["VEH. PROG. KM",0],
+["FUEL FILT CUM WATER SEP",0],["UREA FILTER",0],["PRI. AIR FILTER",40000],
+["SEC. AIR FILTER",108000],["GEAR OIL CHANGE",80000],["DIFF. OIL CHANGE",80000],
+["POWER ST. KM",80000],["RADIATOR COOLENT",72000]
 ];
-
-const monthNames = [
-
-"JANUARY",
-"FEBRUARY",
-"MARCH",
-"APRIL",
-"MAY",
-"JUNE",
-"JULY",
-"AUGUST",
-"SEPTEMBER",
-"OCTOBER",
-"NOVEMBER",
-"DECEMBER"
-
-];
-
-let data = {};
-
-
-/* =========================
-   INITIALIZE
-========================= */
-
-function initialize(){
-
-    const month =
-        document.getElementById("month");
-
-    for(let y=2025;y<=2035;y++){
-
-        for(let m=1;m<=12;m++){
-
-            const value =
-                y+"-"+String(m).padStart(2,"0");
-
-            const option =
-                document.createElement("option");
-
-            option.value=value;
-
-            option.textContent =
-                monthLabel(value);
-
-            month.appendChild(option);
-
-        }
-
-    }
-
-    month.value="2026-08";
-
-    fillServiceColumns();
-
-    buildTable();
-
-    updateToday();
-
+const KEY="GSRTC_KM_REGISTER_EXCEL_V12";
+let db=JSON.parse(localStorage.getItem(KEY)||'{"buses":{},"entries":{},"maintenance":{},"services":{}}');
+function saveDB(){localStorage.setItem(KEY,JSON.stringify(db));refreshAll()}
+function norm(v){return v===null||v===undefined?"":String(v).trim()}
+function num(v){if(typeof v==="number")return v; let n=parseFloat(String(v).replace(/,/g,'')); return isNaN(n)?0:n}
+function pad(n){return String(n).padStart(2,'0')}
+function fmtDate(d){let x=new Date(d+"T00:00:00");return pad(x.getDate())+"-"+pad(x.getMonth()+1)+"-"+String(x.getFullYear()).slice(-2)}
+function dateKey(y,m,d){return `${y}-${pad(m)}-${pad(d)}`}
+function showPage(id,btn){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('nav button').forEach(x=>x.classList.remove('active'));if(btn)btn.classList.add('active');if(id==='maintenance')renderMaintenance();if(id==='summary')renderSummary()}
+function allBuses(){return Object.keys(db.buses).sort((a,b)=>a.localeCompare(b,undefined,{numeric:true}))}
+function refreshSelect(id,all=false){let s=document.getElementById(id);if(!s)return;let old=s.value;s.innerHTML=all?'<option value="">ALL BUS</option>':'';allBuses().forEach(b=>{let o=document.createElement('option');o.value=b;o.textContent=b;s.appendChild(o)});if([...s.options].some(o=>o.value===old))s.value=old}
+function refreshAll(){['dBus','mBus','sBus'].forEach(id=>refreshSelect(id,id==='sBus'));renderDashboard();renderDaily();renderBus();renderMaintenance();renderSummary()}
+function addBus(){let b=norm(document.getElementById('newBus').value),m=norm(document.getElementById('newMake').value);if(!b)return alert('Bus No. નાખો');db.buses[b]={make:m};if(!db.maintenance[b])db.maintenance[b]={};saveDB();document.getElementById('newBus').value='';document.getElementById('newMake').value=''}
+function clearAll(){if(confirm('બધો data delete કરવો છે?')){localStorage.removeItem(KEY);location.reload()}}
+function renderDashboard(){document.getElementById('stBus').textContent=allBuses().length;let rows=Object.values(db.entries);document.getElementById('stRows').textContent=rows.length;document.getElementById('stKm').textContent=rows.reduce((a,x)=>a+num(x.daily),0).toLocaleString('en-IN');document.getElementById('stProg').textContent=PROGRAMS.length;document.getElementById('dashInfo').textContent=allBuses().length?`Imported/entered ${allBuses().length} buses. Maintenance હવે Bus પસંદ કરીને date-wise જોઈ શકો.`:'Excel Import કરો.'}
+function saveDaily(){let b=dBus.value,d=dDate.value;if(!b||!d)return alert('Bus અને Date જરૂરી છે');let k=b+'|'+d;db.entries[k]={bus:b,date:d,daily:num(dKm.value),prog:num(dProg.value),driver:norm(dDriver.value)};if(!db.buses[b])db.buses[b]={make:''};saveDB()}
+function renderDaily(){let t=document.getElementById('dailyTable');let rows=Object.values(db.entries).sort((a,b)=>a.date.localeCompare(b.date)||a.bus.localeCompare(b.bus,undefined,{numeric:true}));t.innerHTML='<tr><th>Date</th><th>Bus No.</th><th>Daily KM</th><th>Progressive KM</th><th>Driver</th></tr>'+rows.map(r=>`<tr><td>${fmtDate(r.date)}</td><td>${r.bus}</td><td>${num(r.daily).toLocaleString('en-IN')}</td><td>${num(r.prog).toLocaleString('en-IN')}</td><td>${r.driver||''}</td></tr>`).join('')}
+function setDefaultDates(){if(!document.getElementById('mFrom').value){document.getElementById('mFrom').value='2026-08-01';document.getElementById('mTo').value='2026-09-01';document.getElementById('sFrom').value='2026-08-01';document.getElementById('sTo').value='2026-09-01'}}
+function maintenanceFor(b){return db.maintenance[b]||{}}
+function renderMaintenance(){setDefaultDates();let b=mBus.value;let t=document.getElementById('maintenanceTable');if(!b){t.innerHTML='<tr><td>Bus પસંદ કરો</td></tr>';return}let from=mFrom.value,to=mTo.value||from;let dates=[];for(let x=new Date(from+'T00:00:00');x<=new Date(to+'T00:00:00');x.setDate(x.getDate()+1))dates.push(x.toISOString().slice(0,10));let md=maintenanceFor(b);document.getElementById('maintenanceTitle').innerHTML='<h2>BUS '+b+' — Maintenance Date Wise KM</h2><div class="muted">Opening KM + દરેક તારીખે Excelમાં જે program KM છે તે જ અહીં બતાવવામાં આવશે.</div>';let head='<tr><th>Date</th>'+PROGRAMS.map(p=>`<th>${p[0]}</th>`).join('')+'</tr>';let body=dates.map(d=>{let r=md[d]||{};return `<tr><td class="sticky1">${fmtDate(d)}</td>`+PROGRAMS.map(p=>`<td>${r[p[0]]!==undefined?num(r[p[0]]).toLocaleString('en-IN'):''}</td>`).join('')+'</tr>'}).join('');t.innerHTML=head+body}
+function markService(){let b=mBus.value,d=mFrom.value;if(!b||!d)return;let md=db.maintenance[b]||(db.maintenance[b]={});let r=md[d]||(md[d]={});r._service=true;db.services[b+'|'+d]=true;saveDB();alert('Service Done save થયું.')}
+function renderSummary(){setDefaultDates();let from=sFrom.value,to=sTo.value;if(!from||!to)return;let filter=sBus.value;let buses=filter?[filter]:allBuses();document.getElementById('summaryTitle').textContent=fmtDate(from)+' થી '+fmtDate(to)+' — Date Wise Summary';let dates=[];for(let x=new Date(from+'T00:00:00');x<=new Date(to+'T00:00:00');x.setDate(x.getDate()+1))dates.push(x.toISOString().slice(0,10));let head='<tr><th class="sticky1">Date</th>'+buses.map(b=>`<th>${b}</th>`).join('')+'<th>TOTAL KM</th></tr>';let body=dates.map(d=>{let total=0;let cells=buses.map(b=>{let r=db.entries[b+'|'+d];let v=r?num(r.daily):0;total+=v;return `<td>${v?v.toLocaleString('en-IN'):''}</td>`}).join('');return `<tr><td class="sticky1">${fmtDate(d)}</td>${cells}<td><b>${total?total.toLocaleString('en-IN'):''}</b></td></tr>`}).join('');document.getElementById('summaryTable').innerHTML=head+body}
+function renderBus(){let t=document.getElementById('busTable');t.innerHTML='<tr><th>Bus No.</th><th>Make</th><th>Action</th></tr>'+allBuses().map(b=>`<tr><td>${b}</td><td>${db.buses[b].make||''}</td><td><button class="btn danger" onclick="deleteBus('${b.replace(/'/g,"\\'")}')">DELETE</button></td></tr>`).join('')}
+function deleteBus(b){if(confirm('Delete '+b+'?')){delete db.buses[b];delete db.maintenance[b];Object.keys(db.entries).filter(k=>k.startsWith(b+'|')).forEach(k=>delete db.entries[k]);saveDB()}}
+function importExcel(){
+ let f=document.getElementById('excelFile').files[0];if(!f)return alert('Excel file પસંદ કરો');
+ let reader=new FileReader();reader.onload=e=>{
+ try{
+  let wb=XLSX.read(e.target.result,{type:'array',cellDates:true});
+  let monthMatch=f.name.match(/(JANUARY|FEBRUARY|MARCH|APRIL|MAY|JUNE|JULY|AUGUST|SEPTEMBER|OCTOBER|NOVEMBER|DECEMBER)[-_ ]?(\d{4})/i);
+  let months={JANUARY:1,FEBRUARY:2,MARCH:3,APRIL:4,MAY:5,JUNE:6,JULY:7,AUGUST:8,SEPTEMBER:9,OCTOBER:10,NOVEMBER:11,DECEMBER:12};
+  let year=monthMatch?+monthMatch[2]:new Date().getFullYear(),month=monthMatch?months[monthMatch[1].toUpperCase()]:new Date().getMonth()+1;
+  let imported=0,programRows=0;
+  wb.SheetNames.forEach(sn=>{
+   if(sn.toUpperCase()==='HOME')return;
+   let b=norm(sn);let ws=wb.Sheets[sn];let a=XLSX.utils.sheet_to_json(ws,{header:1,defval:null,raw:true});
+   if(!a.length)return;
+   let row1=a[0]||[],row2=a[1]||[], opening=a[3]||[];
+   let make=norm(row1[13]);db.buses[b]={make:make||db.buses[b]?.make||''};
+   if(!db.maintenance[b])db.maintenance[b]={};
+   // Row 2 has the exact maintenance headings used by the user's workbook.
+   const map={
+    "DOCKING KM":3,"ENGINE OIL CHANGE KM":4,"VEH. PROG. KM":5,
+    "FUEL FILT CUM WATER SEP":7,"UREA FILTER":8,"PRI. AIR FILTER":9,
+    "SEC. AIR FILTER":10,"GEAR OIL CHANGE":11,"DIFF. OIL CHANGE":12,
+    "POWER ST. KM":13,"RADIATOR COOLENT":14
+   };
+   let openDate=`${year}-${pad(month)}-01`;
+   let orow={};Object.keys(map).forEach(p=>orow[p]=num(opening[map[p]]));orow._opening=true;
+   // Opening values are the baseline shown before day 1.
+   db.maintenance[b]["0000-00-00"]=orow;
+   for(let i=4;i<a.length;i++){
+    let r=a[i]||[];let day=num(r[0]);if(!day||day>31)continue;
+    let d=dateKey(year,month,day);
+    let daily=num(r[1]),prog=num(r[5]),driver=norm(r[21]);
+    db.entries[b+'|'+d]={bus:b,date:d,daily:daily,prog:prog,driver:driver};
+    let mr={};Object.keys(map).forEach(p=>{let v=r[map[p]];if(v!==null&&v!=='')mr[p]=num(v)});
+    if(Object.keys(mr).length){db.maintenance[b][d]=mr;programRows++}
+    imported++;
+   }
+  });
+  localStorage.setItem(KEY,JSON.stringify(db));document.getElementById('importMsg').innerHTML=`<span class="okText">Import સફળ: ${imported} date rows, ${allBuses().length} buses, ${programRows} maintenance rows.</span>`;
+  document.getElementById('formatInfo').textContent='Sheet-wise Bus No + Opening row + Date-wise maintenance/program KM import થયું.';
+  refreshAll();
+ }catch(err){console.error(err);document.getElementById('importMsg').innerHTML='<span class="dangerText">Import Error: '+err.message+'</span>'}
+ };reader.readAsArrayBuffer(f)
 }
-
-
-/* =========================
-   MONTH
-========================= */
-
-function monthLabel(value){
-
-    const p=value.split("-");
-
-    return monthNames[
-        Number(p[1])-1
-    ]+"-"+p[0];
-
-}
-
-
-/* =========================
-   DAYS
-========================= */
-
-function getDays(value){
-
-    const p=value.split("-");
-
-    return new Date(
-        Number(p[0]),
-        Number(p[1]),
-        0
-    ).getDate();
-
-}
-
-
-/* =========================
-   DATE
-========================= */
-
-function displayDate(value,day){
-
-    const p=value.split("-");
-
-    return String(day).padStart(2,"0")
-        +"-"+p[1]
-        +"-"+p[0];
-
-}
-
-
-/* =========================
-   STORAGE KEY
-========================= */
-
-function storageKey(){
-
-    return "KM_REGISTER_"
-        +document.getElementById("vehNo").value
-        +"_"
-        +document.getElementById("month").value;
-
-}
-
-
-/* =========================
-   NEW ROW
-========================= */
-
-function newRow(){
-
-    const row={};
-
-    row.daily="";
-    row.monthly="";
-
-    maintenance.forEach(c=>{
-
-        row[c[1]]=c[2] || "";
-
-    });
-
-    return row;
-
-}
-
-
-/* =========================
-   LOAD
-========================= */
-
-function loadData(){
-
-    try{
-
-        const saved =
-            localStorage.getItem(storageKey());
-
-        data=saved
-            ?JSON.parse(saved)
-            :{};
-
-    }catch(e){
-
-        data={};
-
-    }
-
-}
-
-
-/* =========================
-   SAVE
-========================= */
-
-function saveData(){
-
-    localStorage.setItem(
-        storageKey(),
-        JSON.stringify(data)
-    );
-
-}
-
-
-/* =========================
-   BUILD TABLE
-========================= */
-
-function buildTable(){
-
-    loadData();
-
-    const month =
-        document.getElementById("month").value;
-
-    const totalDays =
-        getDays(month);
-
-    const body =
-        document.getElementById("tableBody");
-
-    body.innerHTML="";
-
-    for(let day=1;day<=totalDays;day++){
-
-        if(!data[day]){
-
-            data[day]=newRow();
-
-        }
-
-        const tr =
-            document.createElement("tr");
-
-        let html="";
-
-        html+=
-            "<td>"+day+"</td>";
-
-        html+=
-            "<td>"+displayDate(month,day)+"</td>";
-
-        html+=
-            '<td class="edit" contenteditable="true" '+
-            'data-day="'+day+'" data-col="daily">'+
-            (data[day].daily||"")+
-            "</td>";
-
-        html+=
-            '<td data-day="'+day+'" data-col="monthly">'+
-            (data[day].monthly||"")+
-            "</td>";
-
-        maintenance.forEach(c=>{
-
-            html+=
-                '<td class="edit" contenteditable="true" '+
-                'data-day="'+day+'" data-col="'+c[1]+'">'+
-                (data[day][c[1]]??"")+
-                "</td>";
-
-        });
-
-        tr.innerHTML=html;
-
-        body.appendChild(tr);
-
-    }
-
-
-    /* TOTAL ROW */
-
-    const total =
-        document.createElement("tr");
-
-    total.className="total";
-
-    total.innerHTML=
-        "<td></td>"+
-        "<td>TOTAL</td>"+
-        '<td id="totalDaily">0</td>'+
-        '<td id="totalMonthly">0</td>'+
-        '<td id="totalDocking">0</td>'+
-        maintenance.slice(1)
-        .map(()=>"<td></td>")
-        .join("");
-
-    body.appendChild(total);
-
-
-    /* EDIT EVENTS */
-
-    document
-    .querySelectorAll(".edit")
-    .forEach(cell=>{
-
-        cell.addEventListener(
-            "input",
-            function(){
-
-                const day=this.dataset.day;
-
-                const col=this.dataset.col;
-
-                data[day][col]=
-                    this.textContent.trim();
-
-                if(col==="daily"){
-
-                    calculateMonthly();
-
-                }else{
-
-                    saveData();
-                    applyColors();
-
-                }
-
-            }
-        );
-
-    });
-
-
-    calculateMonthly();
-
-}
-
-
-/* =========================
-   NUMBER
-========================= */
-
-function number(value){
-
-    const n=parseFloat(
-        String(value||"")
-        .replace(/,/g,"")
-    );
-
-    return isNaN(n)?0:n;
-
-}
-
-
-/* =========================
-   MONTHLY CUMULATIVE
-========================= */
-
-function calculateMonthly(){
-
-    let cumulative=0;
-    let totalDaily=0;
-
-    const rows =
-        document.querySelectorAll(
-            "#tableBody tr:not(.total)"
-        );
-
-    rows.forEach(tr=>{
-
-        const day =
-            tr.children[0].textContent.trim();
-
-        const daily =
-            number(data[day].daily);
-
-        if(String(data[day].daily).trim()!==""){
-
-            cumulative+=daily;
-
-            totalDaily+=daily;
-
-        }
-
-        data[day].monthly =
-            cumulative===0
-            ?""
-            :String(cumulative);
-
-        tr.children[3].textContent =
-            data[day].monthly;
-
-    });
-
-
-    document.getElementById(
-        "totalDaily"
-    ).textContent=
-        totalDaily.toLocaleString("en-IN");
-
-
-    document.getElementById(
-        "totalMonthly"
-    ).textContent=
-        totalDaily.toLocaleString("en-IN");
-
-
-    document.getElementById(
-        "totalDocking"
-    ).textContent=
-        totalDaily.toLocaleString("en-IN");
-
-
-    saveData();
-
-    applyColors();
-
-}
-
-
-/* =========================
-   SERVICE COLORS
-========================= */
-
-function applyColors(){
-
-    document
-    .querySelectorAll(
-        "#tableBody tr:not(.total)"
-    )
-    .forEach(tr=>{
-
-        maintenance.forEach(c=>{
-
-            const cell =
-                tr.querySelector(
-                    '[data-col="'+c[1]+'"]'
-                );
-
-            if(!cell)return;
-
-            cell.classList.remove(
-                "warn",
-                "due",
-                "zero"
-            );
-
-            const value =
-                number(
-                    data[
-                        tr.children[0]
-                        .textContent.trim()
-                    ][c[1]]
-                );
-
-            const target=c[2];
-
-            if(target>0 && value===0){
-
-                cell.classList.add("zero");
-
-            }
-
-            else if(
-                target>0 &&
-                value>=target
-            ){
-
-                cell.classList.add("due");
-
-            }
-
-            else if(
-                target>0 &&
-                value>=target*0.90
-            ){
-
-                cell.classList.add("warn");
-
-            }
-
-        });
-
-    });
-
-}
-
-
-/* =========================
-   SERVICE COLUMN
-========================= */
-
-function fillServiceColumns(){
-
-    const select =
-        document.getElementById(
-            "serviceColumn"
-        );
-
-    maintenance.forEach(c=>{
-
-        const option =
-            document.createElement("option");
-
-        option.value=c[1];
-
-        option.textContent=c[0];
-
-        select.appendChild(option);
-
-    });
-
-}
-
-
-/* =========================
-   SET ZERO
-========================= */
-
-function setZero(){
-
-    const column =
-        document.getElementById(
-            "serviceColumn"
-        ).value;
-
-    if(!column){
-
-        alert("Please select column.");
-
-        return;
-
-    }
-
-    Object.keys(data).forEach(day=>{
-
-        data[day][column]="0";
-
-    });
-
-
-    document
-    .querySelectorAll(
-        '[data-col="'+column+'"]'
-    )
-    .forEach(cell=>{
-
-        cell.textContent="0";
-
-    });
-
-
-    saveData();
-
-    applyColors();
-
-    updateServiceCount();
-
-}
-
-
-/* =========================
-   SERVICE COUNT
-========================= */
-
-function updateServiceCount(){
-
-    const column =
-        document.getElementById(
-            "serviceColumn"
-        ).value;
-
-    let count=0;
-
-    if(column){
-
-        Object.values(data).forEach(row=>{
-
-            if(String(row[column])==="0"){
-
-                count++;
-
-            }
-
-        });
-
-    }
-
-    document.getElementById(
-        "serviceCount"
-    ).textContent=count;
-
-    document.getElementById(
-        "serviceButton"
-    ).textContent=
-        "SERVICE DONE ("+count+")";
-
-}
-
-
-document
-.getElementById("serviceColumn")
-.addEventListener(
-    "change",
-    updateServiceCount
-);
-
-
-/* =========================
-   RESET
-========================= */
-
-function resetAll(){
-
-    if(!confirm(
-        "Reset all data for this vehicle and month?"
-    ))return;
-
-    localStorage.removeItem(
-        storageKey()
-    );
-
-    buildTable();
-
-}
-
-
-/* =========================
-   VEHICLE CHANGE
-========================= */
-
-function vehicleChanged(){
-
-    buildTable();
-
-}
-
-
-/* =========================
-   TITLE
-========================= */
-
-function updateTitle(){
-
-    document.getElementById(
-        "title"
-    ).textContent=
-        "07-KM Register - "+
-        monthLabel(
-            document.getElementById(
-                "month"
-            ).value
-        );
-
-}
-
-
-/* =========================
-   TODAY
-========================= */
-
-function updateToday(){
-
-    const d=new Date();
-
-    document.getElementById(
-        "today"
-    ).textContent=
-        "Today : "+
-        String(d.getDate()).padStart(2,"0")
-        +"-"+
-        String(d.getMonth()+1).padStart(2,"0")
-        +"-"+
-        d.getFullYear();
-
-}
-
-
-/* =====================================================
-   SUMMARY
-===================================================== */
-
-function openSummary(){
-
-    const month =
-        document.getElementById("month").value;
-
-    const p=month.split("-");
-
-    const lastDay =
-        getDays(month);
-
-    document.getElementById(
-        "summaryFrom"
-    ).value=
-        p[0]+"-"+p[1]+"-01";
-
-    document.getElementById(
-        "summaryTo"
-    ).value=
-        p[0]+"-"+p[1]+"-"+
-        String(lastDay).padStart(2,"0");
-
-    document.getElementById(
-        "summaryModal"
-    ).style.display="flex";
-
-    calculateSummary();
-
-}
-
-
-function closeSummary(){
-
-    document.getElementById(
-        "summaryModal"
-    ).style.display="none";
-
-}
-
-
-function calculateSummary(){
-
-    const from =
-        document.getElementById(
-            "summaryFrom"
-        ).value;
-
-    const to =
-        document.getElementById(
-            "summaryTo"
-        ).value;
-
-    if(!from||!to){
-
-        alert(
-            "From Date અને To Date પસંદ કરો."
-        );
-
-        return;
-
-    }
-
-    if(from>to){
-
-        alert(
-            "From Date must be before To Date."
-        );
-
-        return;
-
-    }
-
-
-    const fromDay=
-        Number(from.substring(8,10));
-
-    const toDay=
-        Number(to.substring(8,10));
-
-
-    let dailyTotal=0;
-
-    let monthlyTotal=0;
-
-    let progressiveTotal=0;
-
-
-    /*
-       DAILY KM TOTAL
-       = selected date range daily KM
-    */
-
-    for(
-        let day=fromDay;
-        day<=toDay;
-        day++
-    ){
-
-        if(!data[day])continue;
-
-        dailyTotal +=
-            number(data[day].daily);
-
-    }
-
-
-    /*
-       MONTHLY KM TOTAL
-       = Monthly KM value on TO DATE
-    */
-
-    for(
-        let day=toDay;
-        day>=fromDay;
-        day--
-    ){
-
-        if(
-            data[day] &&
-            String(data[day].monthly).trim()!==""
-        ){
-
-            monthlyTotal=
-                number(data[day].monthly);
-
-            break;
-
-        }
-
-    }
-
-
-    /*
-       PROGRESSIVE KM TOTAL
-       = Vehicle Progressive KM
-         on TO DATE
-    */
-
-    for(
-        let day=toDay;
-        day>=fromDay;
-        day--
-    ){
-
-        if(
-            data[day] &&
-            String(data[day].vehprog).trim()!==""
-        ){
-
-            progressiveTotal=
-                number(data[day].vehprog);
-
-            break;
-
-        }
-
-    }
-
-
-    document.getElementById(
-        "summaryDaily"
-    ).textContent=
-        dailyTotal.toLocaleString("en-IN");
-
-
-    document.getElementById(
-        "summaryMonthly"
-    ).textContent=
-        monthlyTotal.toLocaleString("en-IN");
-
-
-    document.getElementById(
-        "summaryProgressive"
-    ).textContent=
-        progressiveTotal.toLocaleString("en-IN");
-
-
-    document.getElementById(
-        "summaryRange"
-    ).textContent=
-        "Date to Date : "+
-        from.split("-").reverse().join("-")+
-        "  →  "+
-        to.split("-").reverse().join("-");
-
-}
-
-
-/* =====================================================
-   EXCEL EXPORT
-===================================================== */
-
 function exportExcel(){
-
-    if(typeof XLSX==="undefined"){
-
-        alert(
-            "Excel library load નથી થયું. Internet ON કરો."
-        );
-
-        return;
-
-    }
-
-
-    const month =
-        document.getElementById("month").value;
-
-
-    const output=[];
-
-
-    output.push([
-        "07-KM Register - "+
-        monthLabel(month)
-    ]);
-
-    output.push([]);
-
-    output.push([
-        "VEH. NO.",
-        document.getElementById("vehNo").value,
-        "MAKE",
-        document.getElementById("make").value,
-        "MONTH",
-        monthLabel(month)
-    ]);
-
-    output.push([]);
-
-
-    output.push([
-        "NO.",
-        "DATE",
-        "DAILY KM",
-        "MONTHLY KM",
-        ...maintenance.map(c=>c[0])
-    ]);
-
-
-    const totalDays=getDays(month);
-
-
-    for(let day=1;day<=totalDays;day++){
-
-        const row=data[day]||newRow();
-
-        output.push([
-            day,
-            displayDate(month,day),
-            row.daily,
-            row.monthly,
-            ...maintenance.map(
-                c=>row[c[1]]??""
-            )
-        ]);
-
-    }
-
-
-    const workbook=
-        XLSX.utils.book_new();
-
-
-    const sheet=
-        XLSX.utils.aoa_to_sheet(output);
-
-
-    XLSX.utils.book_append_sheet(
-        workbook,
-        sheet,
-        "KM Register"
-    );
-
-
-    XLSX.writeFile(
-        workbook,
-        "07-KM_Register_"+
-        month+
-        ".xlsx"
-    );
-
+ let wb=XLSX.utils.book_new();
+ allBuses().forEach(b=>{
+  let rows=[['VEH. NO.',b,'MAKE',db.buses[b].make||''],['DATE','DAILY KM','MONTHLY KM',...PROGRAMS.map(x=>x[0]),'DRIVER']];
+  let dates=Object.values(db.entries).filter(x=>x.bus===b).sort((a,c)=>a.date.localeCompare(c.date));
+  let monthly=0;
+  dates.forEach(r=>{monthly+=num(r.daily);let md=db.maintenance[b]?.[r.date]||{};rows.push([+r.date.slice(8),r.daily,monthly,...PROGRAMS.map(p=>md[p[0]]??''),r.driver||''])});
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(rows),b.slice(0,31));
+ });
+ XLSX.writeFile(wb,'GSRTC_KM_Register_Export.xlsx')
 }
-
-
-/* =====================================================
-   EXCEL IMPORT
-===================================================== */
-
-function importExcel(event){
-
-    const file=
-        event.target.files[0];
-
-    if(!file)return;
-
-
-    if(typeof XLSX==="undefined"){
-
-        alert(
-            "Excel library load નથી થયું. Internet ON કરો."
-        );
-
-        event.target.value="";
-
-        return;
-
-    }
-
-
-    const reader=
-        new FileReader();
-
-
-    reader.onload=function(e){
-
-        try{
-
-            const workbook=
-                XLSX.read(
-                    e.target.result,
-                    {
-                        type:"array",
-                        cellDates:true
-                    }
-                );
-
-
-            let foundSheet=null;
-            let headerRow=-1;
-            let sheetData=null;
-
-
-            /*
-              Find DATE + DAILY KM header
-              in every Excel sheet.
-            */
-
-            for(
-                const sheetName
-                of workbook.SheetNames
-            ){
-
-                const sheet=
-                    workbook.Sheets[sheetName];
-
-                const array=
-                    XLSX.utils.sheet_to_json(
-                        sheet,
-                        {
-                            header:1,
-                            defval:"",
-                            raw:false
-                        }
-                    );
-
-
-                for(
-                    let r=0;
-                    r<Math.min(array.length,100);
-                    r++
-                ){
-
-                    const line=
-                        array[r].map(
-                            x=>
-                            String(x)
-                            .trim()
-                            .toLowerCase()
-                        );
-
-
-                    const hasDate=
-                        line.some(
-                            x=>
-                            x==="date" ||
-                            x.includes("date")
-                        );
-
-
-                    const hasDaily=
-                        line.some(
-                            x=>
-                            x==="daily km" ||
-                            (
-                                x.includes("daily") &&
-                                x.includes("km")
-                            )
-                        );
-
-
-                    if(
-                        hasDate &&
-                        hasDaily
-                    ){
-
-                        foundSheet=sheetName;
-                        headerRow=r;
-                        sheetData=array;
-
-                        break;
-
-                    }
-
-                }
-
-
-                if(foundSheet)break;
-
-            }
-
-
-            if(!foundSheet){
-
-                alert(
-                    "Excel માં DATE અને DAILY KM વાળો header મળ્યો નથી."
-                );
-
-                return;
-
-            }
-
-
-            const headers=
-                sheetData[headerRow].map(
-                    x=>
-                    String(x)
-                    .trim()
-                    .toLowerCase()
-                );
-
-
-            function normalize(x){
-
-                return String(x)
-                .toLowerCase()
-                .replace(/[^a-z0-9]/g,"");
-
-            }
-
-
-            function findColumn(names){
-
-                const wanted=
-                    names.map(normalize);
-
-
-                /* Exact match */
-
-                for(
-                    let i=0;
-                    i<headers.length;
-                    i++
-                ){
-
-                    if(
-                        wanted.includes(
-                            normalize(headers[i])
-                        )
-                    ){
-
-                        return i;
-
-                    }
-
-                }
-
-
-                /* Partial match */
-
-                for(
-                    let i=0;
-                    i<headers.length;
-                    i++
-                ){
-
-                    const h=
-                        normalize(headers[i]);
-
-                    for(
-                        const w of wanted
-                    ){
-
-                        if(
-                            h.includes(w) ||
-                            w.includes(h)
-                        ){
-
-                            return i;
-
-                        }
-
-                    }
-
-                }
-
-
-                return -1;
-
-            }
-
-
-            const dateColumn=
-                findColumn(["date"]);
-
-
-            const dailyColumn=
-                findColumn([
-                    "daily km",
-                    "daily"
-                ]);
-
-
-            const monthlyColumn=
-                findColumn([
-                    "monthly km",
-                    "monthly"
-                ]);
-
-
-            if(dateColumn<0){
-
-                alert(
-                    "DATE column મળ્યો નથી."
-                );
-
-                return;
-
-            }
-
-
-            data={};
-
-
-            let imported=0;
-
-
-            for(
-                let r=headerRow+1;
-                r<sheetData.length;
-                r++
-            ){
-
-                const row=
-                    sheetData[r];
-
-
-                if(!row)continue;
-
-
-                const rawDate=
-                    row[dateColumn];
-
-
-                if(
-                    rawDate==="" ||
-                    rawDate==null
-                )continue;
-
-
-                let date=null;
-
-
-                /*
-                   DD-MM-YYYY
-                */
-
-                let match=
-                    String(rawDate)
-                    .match(
-                        /^(\\d{1,2})[-\\/](\\d{1,2})[-\\/](\\d{4})$/
-                    );
-
-
-                if(match){
-
-                    date=new Date(
-                        Number(match[3]),
-                        Number(match[2])-1,
-                        Number(match[1])
-                    );
-
-                }
-
-
-                /*
-                   YYYY-MM-DD
-                */
-
-                if(!date){
-
-                    match=
-                        String(rawDate)
-                        .match(
-                            /^(\\d{4})[-\\/](\\d{1,2})[-\\/](\\d{1,2})$/
-                        );
-
-
-                    if(match){
-
-                        date=new Date(
-                            Number(match[1]),
-                            Number(match[2])-1,
-                            Number(match[3])
-                        );
-
-                    }
-
-                }
-
-
-                /*
-                   Excel serial date
-                */
-
-                if(
-                    !date &&
-                    !isNaN(Number(rawDate))
-                ){
-
-                    const parsed=
-                        XLSX.SSF.parse_date_code(
-                            Number(rawDate)
-                        );
-
-                    if(parsed){
-
-                        date=new Date(
-                            parsed.y,
-                            parsed.m-1,
-                            parsed.d
-                        );
-
-                    }
-
-                }
-
-
-                if(!date)continue;
-
-
-                const day=
-                    date.getDate();
-
-
-                if(
-                    day<1 ||
-                    day>31
-                )continue;
-
-
-                data[day]=newRow();
-
-
-                if(dailyColumn>=0){
-
-                    data[day].daily=
-                        row[dailyColumn];
-
-                }
-
-
-                if(monthlyColumn>=0){
-
-                    data[day].monthly=
-                        row[monthlyColumn];
-
-                }
-
-
-                /*
-                   Import all maintenance columns
-                */
-
-                maintenance.forEach(c=>{
-
-                    const column=
-                        findColumn([
-                            c[0],
-                            c[1]
-                        ]);
-
-
-                    if(
-                        column>=0 &&
-                        row[column]!==undefined
-                    ){
-
-                        data[day][c[1]]=
-                            row[column];
-
-                    }
-
-                });
-
-
-                imported++;
-
-            }
-
-
-            if(imported===0){
-
-                alert(
-                    "Excel માં valid date entries મળ્યા નથી."
-                );
-
-                return;
-
-            }
-
-
-            saveData();
-
-            buildTable();
-
-
-            alert(
-                "Excel Import Successful!\n"+
-                imported+
-                " date entries imported."
-            );
-
-
-        }catch(error){
-
-            console.error(error);
-
-            alert(
-                "Excel Import Error:\n"+
-                error.message
-            );
-
-        }finally{
-
-            event.target.value="";
-
-        }
-
-    };
-
-
-    reader.readAsArrayBuffer(file);
-
-}
-
-
-/* START */
-
-initialize();
-
+document.addEventListener('DOMContentLoaded',()=>{setDefaultDates();refreshAll()});
 </script>
-
-</body>
-</html>
+</body></html>
