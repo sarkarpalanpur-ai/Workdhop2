@@ -60,7 +60,7 @@ label{font-weight:700;font-size:13px}input,select{width:100%;padding:10px;border
 દરેક vehicle માટે અલગ Sheet હોય તો Sheet Name ને Bus No માનવામાં આવશે. <b>HOME</b> sheet import નહીં થાય.
 Opening rowમાંથી Maintenanceના સાચા KM લેવાશે અને 1,2,3... તારીખોની rowsમાંથી date-wise program KM લેવાશે.
 </div>
-<input id="excelFile" type="file" accept=".xlsx,.xls">
+<input id="excelFile" type="file" accept=".xlsx,.xls" multiple>
 <div class="actions">
 <button class="btn primary" onclick="importExcel()">IMPORT EXCEL</button>
 <button class="btn" onclick="exportExcel()">EXPORT EXCEL</button>
@@ -185,47 +185,64 @@ function renderProgramSummary(){setDefaultDates();let from=pFrom.value,to=pTo.va
 function renderBus(){let t=document.getElementById('busTable');t.innerHTML='<tr><th>Bus No.</th><th>Make</th><th>Action</th></tr>'+allBuses().map(b=>`<tr><td>${b}</td><td>${db.buses[b].make||''}</td><td><button class="btn danger" onclick="deleteBus('${b.replace(/'/g,"\\'")}')">DELETE</button></td></tr>`).join('')}
 function deleteBus(b){if(confirm('Delete '+b+'?')){delete db.buses[b];delete db.maintenance[b];Object.keys(db.entries).filter(k=>k.startsWith(b+'|')).forEach(k=>delete db.entries[k]);saveDB()}}
 function importExcel(){
- let f=document.getElementById('excelFile').files[0];if(!f)return alert('Excel file પસંદ કરો');
- let reader=new FileReader();reader.onload=e=>{
- try{
-  let wb=XLSX.read(e.target.result,{type:'array',cellDates:true});
-  let monthMatch=f.name.match(/(JANUARY|FEBRUARY|MARCH|APRIL|MAY|JUNE|JULY|AUGUST|SEPTEMBER|OCTOBER|NOVEMBER|DECEMBER)[-_ ]?(\d{4})/i);
-  let months={JANUARY:1,FEBRUARY:2,MARCH:3,APRIL:4,MAY:5,JUNE:6,JULY:7,AUGUST:8,SEPTEMBER:9,OCTOBER:10,NOVEMBER:11,DECEMBER:12};
-  let year=monthMatch?+monthMatch[2]:new Date().getFullYear(),month=monthMatch?months[monthMatch[1].toUpperCase()]:new Date().getMonth()+1;
-  let imported=0,programRows=0;
-  wb.SheetNames.forEach(sn=>{
-   if(sn.toUpperCase()==='HOME')return;
-   let b=norm(sn);let ws=wb.Sheets[sn];let a=XLSX.utils.sheet_to_json(ws,{header:1,defval:null,raw:true});
-   if(!a.length)return;
-   let row1=a[0]||[],row2=a[1]||[], opening=a[3]||[];
-   let make=norm(row1[13]);db.buses[b]={make:make||db.buses[b]?.make||''};
-   if(!db.maintenance[b])db.maintenance[b]={};
-   // Row 2 has the exact maintenance headings used by the user's workbook.
-   const map={
-    "DOCKING KM":3,"ENGINE OIL CHANGE KM":4,"VEH. PROG. KM":5,
-    "FUEL FILT CUM WATER SEP":7,"UREA FILTER":8,"PRI. AIR FILTER":9,
-    "SEC. AIR FILTER":10,"GEAR OIL CHANGE":11,"DIFF. OIL CHANGE":12,
-    "POWER ST. KM":13,"RADIATOR COOLENT":14
-   };
-   let openDate=`${year}-${pad(month)}-01`;
-   let orow={};Object.keys(map).forEach(p=>orow[p]=num(opening[map[p]]));orow._opening=true;
-   // Opening values are the baseline shown before day 1.
-   db.maintenance[b]["0000-00-00"]=orow;
-   for(let i=4;i<a.length;i++){
-    let r=a[i]||[];let day=num(r[0]);if(!day||day>31)continue;
-    let d=dateKey(year,month,day);
-    let daily=num(r[1]),prog=num(r[5]),driver=norm(r[21]);
-    db.entries[b+'|'+d]={bus:b,date:d,daily:daily,prog:prog,driver:driver};
-    let mr={};Object.keys(map).forEach(p=>{let v=r[map[p]];if(v!==null&&v!=='')mr[p]=num(v)});
-    if(Object.keys(mr).length){db.maintenance[b][d]=mr;programRows++}
-    imported++;
+ let files=[...document.getElementById('excelFile').files];
+ if(!files.length)return alert('Excel file પસંદ કરો');
+ let totalImported=0,totalProgramRows=0,totalSheets=0,errors=[];
+ const months={JANUARY:1,FEBRUARY:2,MARCH:3,APRIL:4,MAY:5,JUNE:6,JULY:7,AUGUST:8,SEPTEMBER:9,OCTOBER:10,NOVEMBER:11,DECEMBER:12};
+ const map={
+  "DOCKING KM":3,"ENGINE OIL CHANGE KM":4,"VEH. PROG. KM":5,
+  "FUEL FILT CUM WATER SEP":7,"UREA FILTER":8,"PRI. AIR FILTER":9,
+  "SEC. AIR FILTER":10,"GEAR OIL CHANGE":11,"DIFF. OIL CHANGE":12,
+  "POWER ST. KM":13,"RADIATOR COOLENT":14
+ };
+ function fileMonthYear(name){
+   let mm=name.match(/(JANUARY|FEBRUARY|MARCH|APRIL|MAY|JUNE|JULY|AUGUST|SEPTEMBER|OCTOBER|NOVEMBER|DECEMBER)[-_ ]?(\d{4})/i);
+   return mm?{month:months[mm[1].toUpperCase()],year:+mm[2]}:null;
+ }
+ function excelDate(v){
+   if(v instanceof Date && !isNaN(v)) return {date:v.toISOString().slice(0,10),day:v.getDate(),month:v.getMonth()+1,year:v.getFullYear()};
+   if(typeof v==='number' && v>30000 && v<60000){
+     let d=new Date(Date.UTC(1899,11,30)+v*86400000);return {date:d.toISOString().slice(0,10),day:d.getUTCDate(),month:d.getUTCMonth()+1,year:d.getUTCFullYear()};
    }
-  });
-  localStorage.setItem(KEY,JSON.stringify(db));document.getElementById('importMsg').innerHTML=`<span class="okText">Import સફળ: ${imported} date rows, ${allBuses().length} buses, ${programRows} maintenance rows.</span>`;
-  document.getElementById('formatInfo').textContent='Sheet-wise Bus No + Opening row + Date-wise maintenance/program KM import થયું.';
-  refreshAll();
- }catch(err){console.error(err);document.getElementById('importMsg').innerHTML='<span class="dangerText">Import Error: '+err.message+'</span>'}
- };reader.readAsArrayBuffer(f)
+   let z=norm(v); let m=z.match(/^(\d{1,2})[\/-](\d{1,2})[\/-](\d{2,4})$/);
+   if(m){let y=+m[3];if(y<100)y+=2000;return {date:dateKey(y,+m[2],+m[1]),day:+m[1],month:+m[2],year:y};}
+   return null;
+ }
+ function processWorkbook(f,done){
+   let reader=new FileReader();reader.onload=e=>{
+    try{
+     let wb=XLSX.read(e.target.result,{type:'array',cellDates:true});
+     let fy=fileMonthYear(f.name); let fileImported=0,fileProg=0,fileSheets=0;
+     wb.SheetNames.forEach(sn=>{
+      if(sn.toUpperCase()==='HOME')return;
+      let b=norm(sn);let ws=wb.Sheets[sn];let a=XLSX.utils.sheet_to_json(ws,{header:1,defval:null,raw:true});
+      if(!a.length)return; fileSheets++;
+      let row1=a[0]||[], opening=a[3]||[];
+      db.buses[b]={make:norm(row1[13])||db.buses[b]?.make||''};
+      if(!db.maintenance[b])db.maintenance[b]={};
+      // Keep opening KM separately for every imported month. Never overwrite another month's opening values.
+      let openMonth=fy?`${fy.year}-${pad(fy.month)}`:'unknown';
+      let orow={};Object.keys(map).forEach(p=>orow[p]=num(opening[map[p]]));orow._opening=true;orow._month=openMonth;
+      db.maintenance[b]['OPENING|'+openMonth]=orow;
+      for(let i=4;i<a.length;i++){
+       let r=a[i]||[]; let dv=excelDate(r[0]);
+       if(!dv){let day=num(r[0]);if(!day||day>31)continue;if(!fy)continue;dv={date:dateKey(fy.year,fy.month,day),day,month:fy.month,year:fy.year};}
+       let d=dv.date;
+       let daily=num(r[1]),prog=num(r[5]),driver=norm(r[21]);
+       // Merge/update only this exact bus+date. Other months stay untouched.
+       let ek=b+'|'+d; let old=db.entries[ek]||{};
+       db.entries[ek]={...old,bus:b,date:d,daily:daily,prog:prog,driver:driver||old.driver||''};
+       let mr=db.maintenance[b][d]||{};
+       Object.keys(map).forEach(p=>{let v=r[map[p]];if(v!==null&&v!=='')mr[p]=num(v)});
+       if(Object.keys(mr).length){db.maintenance[b][d]=mr;fileProg++;}
+       fileImported++;
+      }
+     });
+     totalImported+=fileImported;totalProgramRows+=fileProg;totalSheets+=fileSheets;done();
+    }catch(err){errors.push(f.name+': '+err.message);done();}
+   };reader.readAsArrayBuffer(f);
+ }
+ let i=0; function next(){if(i>=files.length){localStorage.setItem(KEY,JSON.stringify(db));document.getElementById('importMsg').innerHTML=`<span class="okText">Import સફળ: ${files.length} file(s), ${totalSheets} vehicle sheets, ${totalImported} date rows, ${allBuses().length} buses, ${totalProgramRows} maintenance rows. જૂનો data safe છે.</span>`+(errors.length?`<div class="dangerText">${errors.join('<br>')}</div>`:'');document.getElementById('formatInfo').textContent='Unlimited multi-file import: જૂના મહિના રાખીને નવા મહિના/તારીખો ઉમેરાય છે.';refreshAll();return;}processWorkbook(files[i++],next)};next();
 }
 function exportExcel(){
  let wb=XLSX.utils.book_new();
